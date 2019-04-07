@@ -1,0 +1,80 @@
+{% extends "nucescircle/base.html" %}
+{% block content %}
+    <div class="container-fluid gedf-wrapper">
+        <div class="row">
+            <div class="col-md-2 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="h5">@LeeCross</div>
+                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
+                            etc.
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Followers</div>
+                            <div class="h5">52342</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Following</div>
+                            <div class="h5">6758</div>
+                        </li>
+                        <li class="list-group-item">How you doin'?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8 gedf-main mt-4">
+                <div class="card"> <!-- sort of, nesting of cards -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="connected-tab" data-toggle="tab" href="#" role="tab" aria-controls="connected" aria-selected="true">Connected</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="inv-tab" data-toggle="tab" href="#" role="tab" aria-controls="inv" aria-selected="false">Invitations</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="pending-tab" data-toggle="tab" href="#" role="tab" aria-controls="pending" aria-selected="false">Pending</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="connected" role="tabpanel" aria-labelledby="connected-tab">
+
+                      </div>
+                      <div class="tab-pane fade" id="inv" role="tabpanel" aria-labelledby="inv-tab">
+
+                      </div>
+                      <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mt-4">
+                <div class="card gedf-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+                <div class="card gedf-card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

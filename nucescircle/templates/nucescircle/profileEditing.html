@@ -1,0 +1,139 @@
+{% extends "nucescircle/base.html" %}
+{% block content %}
+<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-dark">
+    <label class="navbar-brand text-white ml-sm-5">NUCESCircle</label>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="input-group col-md-3">
+            <input class="form-control py-2" type="search" placeholder="Search..." id="example-search-input">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </span>
+        </div>
+        <form class="form-inline my-2 my-lg-0 ml-auto">
+            <a class="nav-link mr-sm-3 text-white bg-dark" href="home.html"><i class="fas fa-home"></i> Home</a>
+            <a class="nav-link mr-sm-3 text-white bg-dark" href="MyCircle.html"><i class="fas fa-user-plus"></i> My Circle</a>
+            <a class="nav-link mr-sm-3 text-white bg-dark" href="JobsListing.html"><i class="fas fa-briefcase"></i> Jobs</a>
+            <a class="nav-link mr-sm-3 text-white bg-dark" href="Recruit.html"><i class="fas fa-bullhorn"></i> Recruit</a>
+            <div class="dropdown mr-sm-5">
+                <button class="btn btn-secondary dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i> Me</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="profileEditing.html">View Profile</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <hr class="my-2">
+                    <a class="dropdown-item" href="newLogin.html">Log Out</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</nav>
+<div class="container-fluid gedf-wrapper">
+    <div class="row">
+        <div class="col-md-3 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="h5">@LeeCross</div>
+                    <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                    <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
+                        etc.
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Followers</div>
+                        <div class="h5">52342</div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Following</div>
+                        <div class="h5">6758</div>
+                    </li>
+                    <li class="list-group-item">How you doin'?</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6 gedf-main mt-4" id="mainFeed">
+            <div class="card">
+                <div class="card-body">
+                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="logo.PNG" height="300px" alt="First slide">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">First Name</label>
+                    <input class="form-control col-lg-6" type="text">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Last Name</label>
+                    <input class="form-control col-lg-6" type="text">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Password</label>
+                    <input class="form-control col-lg-6" type="password">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Accomplishments</label>
+                    <input class="form-control col-lg-6" type="text">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Interests</label>
+                    <input class="form-control col-lg-6" type="text">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Semester Projects</label>
+                    <input class="form-control col-lg-6" type="text">
+                </span>
+                    </div>
+                    <div class="form mb-3">
+                <span class="d-block">
+                    <label for="">Graduation Date</label>
+                    <input class="form-control col-lg-6" type="date">
+                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mt-4">
+            <div class="card gedf-card">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+            <div class="card gedf-card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

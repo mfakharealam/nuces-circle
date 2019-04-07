@@ -1,0 +1,75 @@
+{% extends "nucescircle/base2.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container vertical-center">
+    <div class="mx-auto col-md-8">
+        <div class="card bg-dark mt-4 mb-4">
+            <div class="card-header text-center"><h2 class="text-white">Register</h2></div>
+            <div class="card-body text-center">
+                <p class="text-white">Join our Circle - it's free.</p>
+                <hr class="my-4 bg-white">
+                <form method="post" class="form-group col-11 mx-auto">
+                    {% csrf_token %} <!-- for security purposes -->
+                    <fieldset class="form-group text-white">
+                       <!-- {{ form|crispy }} -->
+                        <div class="row">
+                          <div class="col-6">
+                            {{ form.username|as_crispy_field }}
+                          </div>
+                          <div class="col-6">
+                            {{ form.email|as_crispy_field }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            {{ form.first_name|as_crispy_field }}
+                          </div>
+                          <div class="col-6">
+                            {{ form.last_name|as_crispy_field }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            {{ form.password1|as_crispy_field }}
+                          </div>
+                          <div class="col-6">
+                            {{ form.password2|as_crispy_field }}
+                          </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-light" type="submit">
+                            Sign Up
+                        </button>
+                    </div>
+                </form>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        Already Have An Account?
+                        <a class="ml-2 text-white" href="{% url 'circle-login' %}">Log In</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--
+
+<div class="col-md-6 mx-auto bg-white mt-4">
+    <div class="content-section">
+        <form action="" method="POST">
+
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account?
+                <a class="ml-2" href="#">Sign In</a>
+            </small>
+        </div>
+    </div>
+</div>
+-->
+{% endblock %}

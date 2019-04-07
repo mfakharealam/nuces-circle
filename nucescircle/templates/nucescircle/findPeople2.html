@@ -1,0 +1,120 @@
+{% extends "nucescircle/base.html" %}
+{% block content %}
+<div>
+    <div class="gedf-main mt-2">
+        <div class="card"> <!-- sort of, nesting of cards -->
+            <div class="card-header bg-dark text-white">
+                <h3>Find People</h3>
+            </div>
+            <div class="card-body">
+                <div class="input-group col-md-8 mx-auto mt-4 mb-4">
+                    <div class="col-sm-5 ml-5">
+                        <input type="text" placeholder="Search..." class="form-control" id="searchField">
+                    </div>
+                   <div class="col-sm-2 mr-2">
+                       <select class="form-control btn-outline-dark" id="criteria">
+                           <option value="name">by Name</option>
+                           <option value="discipline">by Discipline</option>
+                           <option value="gradDate">by Graduation Date</option>
+                       </select>
+                   </div>
+                    <button class="btn btn-outline-dark" id="searchBtn" onclick="searchFtn()">Search</button>
+                </div>
+                <div class="form-inline text-center" id="loadHere">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    class User{
+        constructor(name, gradDate, discipline, interests)
+        {
+            this.uname = name;
+            this.gradDate = gradDate;
+            this.discipline = discipline;
+            this.interests = interests;
+        }
+    }
+
+    var generateUserCard = function (name, gdate, field, interests) {
+        var html = "              <div class=\"card border-dark ml-4 mr-5 mb-4\" style=\"width: 18rem;\">\n" +
+            "                        <div class=\"card-header\">\n" +
+            "                            <a href=\"\">\n" +
+            "                                <figure class=\"avatar\">\n" +
+            "                                    <img class=\"rounded-circle mt-4\" src=\"logo.PNG\" height=\"160\" width=\"160\" alt=\"User Image\"/>\n" +
+            "                                </figure>\n" +
+            "                            </a>\n" +
+            "                        </div>\n" +
+            "                        <div class=\"card-body\">\n" +
+            "                            <h5 class=\"card-title\">" + name + "</h5>\n" +
+            "                            <p class=\"card-text\">" + gdate + "</p>\n" +
+            "                            <p class=\"card-text\">" + field + "</p>\n" +
+            "                            <hr>\n" +
+            "                            <a href=\"#\" class=\"btn btn-outline-dark\">Connect</a>\n" +
+            "                        </div>\n" +
+            "                        <div class=\"card-footer\">\n" +
+            "                            <span class=\"badge badge-pill badge-dark\">" + interests + "</span>\n" +
+            "                        </div>\n" +
+            "                    </div>\n";
+        document.getElementById("loadHere").innerHTML += html;
+    };
+
+    var userArray = [new User("Trevor", "2020", "CS", "Killing, Coding"),
+        new User("Zulfi", "2021", "BBA", "Reading"),
+        new User("Albert", "2022", "EE", "Circuits"),
+        new User("Azam", "2021", "CS", "Cricket"),
+        new User("Adam", "2020", "EE", "Playing"),
+        new User("Mathew", "2022", "CS", "Learning")
+    ];
+    /*var user1 = new User("Trevor", "2020", "CS", "Killing, Coding");
+    var user2 = new User("Zulfi", "2021", "BBA", "Reading");
+    var user3 = new User("Albert", "2022", "EE", "Circuits");
+    var user4 = new User("Azam", "2021", "CS", "Cricket");
+    var user5 = new User("Adam", "2020", "EE", "Playing");
+    var user6 = new User("Mathew", "2022", "CS", "Learning");*/
+
+    var searchFtn = function () {
+        document.getElementById("loadHere").innerHTML = "";
+        var btn = document.getElementById("searchBtn");
+        var toSearch = document.getElementById("searchField").value;
+
+        var dd = document.getElementById("criteria");
+        var selectedCriteria = dd.options[dd.selectedIndex].value;
+
+        if (toSearch.length > 0) {
+            if (selectedCriteria.match("name")) {
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i].uname.toLowerCase().match(toSearch.toLowerCase())) {
+                        generateUserCard(userArray[i].uname, userArray[i].gradDate,
+                            userArray[i].discipline, userArray[i].interests);
+                    }
+                }
+            }
+            if (selectedCriteria.match("gradDate")) {
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i].gradDate.match(toSearch)) {
+                        generateUserCard(userArray[i].uname, userArray[i].gradDate,
+                            userArray[i].discipline, userArray[i].interests);
+                    }
+                }
+            } else if (selectedCriteria.match("discipline")) {
+                toSearch = toSearch.toUpperCase();
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i].discipline.match(toSearch)) {
+                        generateUserCard(userArray[i].uname, userArray[i].gradDate,
+                            userArray[i].discipline, userArray[i].interests);
+                    }
+                }
+            }
+        }
+        else
+        {
+            document.getElementById("loadHere").innerHTML += "<h3 class=\"mx-auto\">No results found.</h3>\n";
+        }
+    };
+</script>
+
+{% endblock %}

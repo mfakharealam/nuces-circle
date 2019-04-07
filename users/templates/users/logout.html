@@ -1,0 +1,33 @@
+{% extends "nucescircle/base2.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container vertical-center">
+    <div class="mx-auto col-md-8">
+        <div class="card bg-dark mt-4 mb-4">
+            <div class="card-header text-center"><h2 class="text-white">Logged Out!</h2></div>
+            <div class="card-body text-center">
+                <p class="text-white">Login Again</p>
+                <hr class="my-4 bg-white">
+                <form method="post" class="form-group col-11 mx-auto">
+                    {% csrf_token %} <!-- for security purposes -->
+                    <fieldset class="form-group text-white">
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <a class="btn btn-outline-light" href="{% url 'circle-login' %}">
+                            Login
+                        </a>
+                    </div>
+                </form>
+                <div class="border-top pt-3">
+                    <small class="text-white">
+                        Need An Account?
+                        <a class="ml-2" href="{% url 'register' %}">Sign Up</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

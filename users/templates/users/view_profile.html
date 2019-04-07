@@ -1,0 +1,146 @@
+{% extends "nucescircle/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="col-md-6 mx-auto mb-3 mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="media mt-2">
+                {% if uid == user.id %}
+                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="mr-3 mt-2 rounded-circle" width="65" height="65">
+                {% else %}
+                    <img src="{{ to_user.profile.image.url }}" alt="{{ to_user.username }}" class="mr-3 mt-2 rounded-circle" width="65" height="65">
+                {% endif %}
+                <div class="media-body">
+                    <div class="float-right">
+                        {% if uid == user.id %}
+                            <a href="{% url 'profile' %}"><i class="fas fa-edit"></i> Edit</a>
+                        {% else %}
+                            {% if button_status == 'not_friend' %}
+                                <a class="btn btn-dark" href="{% url 'send-connect-request' to_user.id %}">Connect</a>
+                            {% elif button_status == 'friend_request_sent' %}
+                                <a class="btn btn-secondary" href="{% url 'cancel-connect-request'  to_user.id %}">Cancel Request</a>
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                    {% if uid == user.id %}
+                    <h3 class="">{{ user.username }}</h3>
+                    <h4 class="">{{ user.first_name }} {{ user.last_name }}</h4>
+                    <p class="text-secondary">{{ user.email }}</p>
+                    {% else %}
+                        <h3 class="">{{ to_user.username }}</h3>
+                        <h4 class="">{{ to_user.first_name }} {{ to_user.last_name }}</h4>
+                        <p class="text-secondary">{{ to_user.email }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mx-auto mb-3">
+    <div class="card">
+        <div class="card-header"><strong>Education Info</strong>
+             <div class="float-right">
+                 {% if uid == user.id %}
+                    <a href="{% url 'add-edu' %}"><i class="fas fa-pen"></i> Add</a>
+                 {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            {% for edu in education_data %}
+                {% if edu.user == user %}
+                    <div class="media mt-2">
+                                {% if uid == user.id %}
+                        <img src="{% static 'users/university.png' %}" class="mr-3 mt-2 rounded-circle" width="45" height="45">
+                        <div class="media-body">
+                            <div class="float-right">
+                                    <a href="{% url 'edit-edu' edu.id %}"><i class="fas fa-edit"></i> Edit</a>
+                                {% endif %}
+                            </div>
+                            {% if uid == user.id %}
+                                <h5 class="">{{ edu.school }}</h5>
+                                <h6 class="">{{ edu.degree }}</h6>
+                                <p class="text-secondary">{{ edu.grad_year }}</p>
+                                <p class="text-muted">{{ edu.description }}</p>
+                            {% else %}
+                                <p class="text-secondary">{{ to_user.education_set.all.first }}</p>
+                            {% endif %}
+                        </div>
+                     </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 mx-auto mb-3">
+    <div class="card">
+        <div class="card-header"><strong>Skills</strong>
+             <div class="float-right">
+                 {% if uid == user.id %}
+                    <a href="{% url 'add-skill' %}"><i class="fas fa-pen"></i> Add</a>
+                 {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            {% for sk in skill_data %}
+                {% if sk.user == user %}
+                    <div class="media mt-2">
+                        <div class="media-body">
+                            <div class="float-right">
+                                {% if uid == user.id %}
+                                    <a href="{% url 'edit-skill' sk.id %}"><i class="fas fa-edit"></i> Edit</a>
+                                {% endif %}
+                            </div>
+                            <div class="float-right mr-4">
+                                {% if uid == user.id %}
+                                    <a href="{% url 'delete-skill' sk.id %}"><i class="fas fa-trash"></i> Remove</a>
+                                {% endif %}
+                            </div>
+                            {% if uid == user.id %}
+                                <h6 class="">{{ sk.skill }}</h6>
+                            {% else %}
+                                <h6 class="">{{ to_user.skill_set.all }}</h6>
+                            {% endif %}
+
+                        </div>
+                     </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-6 mx-auto mb-3">
+    <div class="card">
+        <div class="card-header"><strong>Interests</strong>
+
+        </div>
+        <div class="card-body">
+            <div class="float-right">
+                {% if uid == user.id %}
+                    <a href="{% url 'edit-int' %}"><i class="fas fa-edit"></i> Edit</a>
+                {% endif %}
+            </div>
+            {% for int in interests %}
+                {% if int.user == user %}
+                    <div class="media mt-2">
+                        <div class="media-body">
+                            {% if uid == user.id %}
+                                <h6 class="">Frameworks: {{ int.frameworks }}</h6>
+                                <h6 class="">Languages: {{ int.languages }}</h6>
+                                <h6 class="">Technologies: {{ int.technologies }}</h6>
+                            {% else %}
+                                <h6 class="">{{ to_user.interests }}</h6>
+                            {% endif %}
+                        </div>
+                     </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

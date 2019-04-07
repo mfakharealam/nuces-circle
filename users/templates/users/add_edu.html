@@ -1,0 +1,24 @@
+{% extends "nucescircle/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="col-md-6 mx-auto">
+    <div class="card">
+        <div class="card-header">
+            Edit Information
+        </div>
+        <div class="card-body">
+            <div class="content-section">
+                <form method="post" class="form-group" action="{% url 'submit-edu' %}">
+                    {% csrf_token %} <!-- for security purposes -->
+                    <fieldset class="form-group">
+                        {{ education_form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-dark" type="submit"><i class="fas fa-pen"></i> Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
