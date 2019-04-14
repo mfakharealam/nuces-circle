@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Education, Interests, Skills, Profile, UserConnections, User
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, EducationForm, InterestsForm, SkillForm
+from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, EducationForm, InterestsForm, SkillForm, ExperienceForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -15,7 +15,7 @@ def register(request):
             return redirect('circle-login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+        return render(request, 'users/register.html', {'form': form})
 
 
 @login_required
@@ -35,6 +35,7 @@ def view_profile(request, *args, **kwargs):
         if len(UserConnections.objects.filter(from_user=request.user).filter(to_user=p.user)) == 1:
             button_status = 'friend_request_sent'
     edu_data = Education.objects.all()
+    exp_data = WorkExperience.objects.all()
     interests = Interests.objects.all()
     skill_data = Skills.objects.all()
     context = {
@@ -44,6 +45,7 @@ def view_profile(request, *args, **kwargs):
         'education_data': edu_data,
         'interests': interests,
         'skill_data': skill_data,
+        'exp_data': exp_data,
         'uid': uid
     }
     return render(request, 'users/view_profile.html', context)
@@ -90,7 +92,7 @@ def update_education_info(request, *args, **kwargs):
         education_form = EducationForm(request.POST, instance=edu_data)
         education_form.save()
     # edu_data = Education.objects.all()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
 
 
 @login_required
@@ -106,12 +108,49 @@ def submit_education_info(request):
         ed = education_from.save(commit=False)
         ed.user = request.user
         ed.save()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
+
+
+@login_required
+def edit_exp_info(request, *args, **kwargs):
+    exp_id = int(kwargs['exp_info_id'])
+    exp_data = WorkExperience.objects.get(pk=exp_id)
+    exp_form = ExperienceForm(instance=exp_data)
+    return render(request, 'users/edit_exp.html', context={'exp_form': exp_form,
+                                                           'exp_data': exp_data})
+
+
+@login_required
+def update_exp_info(request, *args, **kwargs):
+    eid = int(kwargs['exp_info_id'])
+    if request.method == 'POST':
+        # obj = Education.objects.filter(pk=eid)
+        exp_data = WorkExperience.objects.get(pk=eid)
+        exp_form = ExperienceForm(instance=exp_data)
+        exp_form.save()
+    # edu_data = Education.objects.all()
+    return redirect('view-profile', uid=request.user.id)
+
+
+@login_required
+def add_exp_info(request):
+    exp_from = ExperienceForm()
+    return render(request, 'users/add_exp.html', context={'exp_form': exp_from})
+
+
+@login_required
+def submit_exp_info(request):
+    if request.method == 'POST':
+        exp_from = ExperienceForm(request.POST)
+        ed = exp_from.save(commit=False)
+        ed.user = request.user
+        ed.save()
+    return redirect('view-profile', uid=request.user.id)
 
 
 @login_required
 def edit_interest_info(request):
-    int_data = Interests.objects.all().first()
+    int_data = Interests.objects.filter(user=request.user)
     int_form = InterestsForm(instance=int_data)
     return render(request, 'users/edit_int.html', context={'int_form': int_form,
                                                            'int_data': int_data})
@@ -121,13 +160,13 @@ def edit_interest_info(request):
 def update_interest_info(request):
     if request.method == 'POST':
         # obj = Education.objects.filter(pk=eid)
-        int_data = Interests.objects.all().first()
-        int_form = InterestsForm(request.POST, instance=int_data)
+        int_data = Interests.objects.filter(user=request.user)
+        int_form = InterestsForm(instance=int_data)
         int_f = int_form.save(commit=False)
         int_f.user = request.user
         int_f.save()
     # edu_data = Education.objects.all()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
 
 
 @login_required
@@ -152,7 +191,7 @@ def submit_skill_info(request):
         sk = skill_form.save(commit=False)
         sk.user = request.user
         sk.save()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
 
 
 @login_required
@@ -164,7 +203,7 @@ def delete_skill_info(request, *args, **kwargs):
     print(sk.skill)
     sk.delete()
     # edu_data = Education.objects.all()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
 
 
 @login_required
@@ -176,11 +215,12 @@ def update_skill_info(request, *args, **kwargs):
         skill_form = SkillForm(request.POST, instance=skill_data)
         skill_form.save()
     # edu_data = Education.objects.all()
-    return redirect('view-profile')
+    return redirect('view-profile', uid=request.user.id)
 
 # For connecting with users
 
 
+@login_required
 def users_list(request):
     users = Profile.objects.exclude(user=request.user)
     context = {
@@ -189,13 +229,15 @@ def users_list(request):
     return render(request, "", context)
 
 
+@login_required
 def send_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
     user = get_object_or_404(User, id=uid)
-    frequest, created = UserConnections.objects.get_or_create(from_user=request.user, to_user=user)
+    frequest, created = UserConnections.objects.get_or_create(from_user=request.user, to_user=user)  # returns two vals
     return redirect('view-profile', uid=uid)
 
 
+@login_required
 def cancel_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
     user = get_object_or_404(User, id=uid)
@@ -206,6 +248,7 @@ def cancel_connect_request(request, *args, **kwargs):
     return redirect('view-profile', uid=uid)
 
 
+@login_required
 def accept_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
     from_user = get_object_or_404(User, id=uid)
@@ -218,6 +261,7 @@ def accept_connect_request(request, *args, **kwargs):
     return redirect('/users/{}'.format(request.user.profile.slug))
 
 
+@login_required
 def delete_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
     from_user = get_object_or_404(User, id=uid)

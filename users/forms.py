@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Education, Interests, Skills, UserConnections
+from .models import Profile, Education, Interests, Skills, WorkExperience
 
 
 class UserRegisterForm(UserCreationForm):  # inheriting from UserCreationForm
@@ -45,6 +45,17 @@ class EducationForm(forms.ModelForm):
         fields = ['school', 'degree', 'grad_year', 'study_field', 'description']
         labels = {
             'grad_year': 'Graduation Year'
+        }
+
+
+class ExperienceForm(forms.ModelForm):
+    class Meta:
+        model = WorkExperience
+        fields = ['exp_title', 'company', 'description', 'start_year', 'end_year']
+        labels = {
+            'exp_title': 'Title',
+            'start_year': 'Start Date',
+            'end_year': 'End Date'
         }
 
 

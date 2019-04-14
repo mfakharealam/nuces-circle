@@ -48,28 +48,59 @@
             </div>
         </div>
         <div class="card-body">
-            {% for edu in education_data %}
-                {% if edu.user == user %}
-                    <div class="media mt-2">
-                                {% if uid == user.id %}
-                        <img src="{% static 'users/university.png' %}" class="mr-3 mt-2 rounded-circle" width="45" height="45">
-                        <div class="media-body">
-                            <div class="float-right">
-                                    <a href="{% url 'edit-edu' edu.id %}"><i class="fas fa-edit"></i> Edit</a>
-                                {% endif %}
+            {% if uid == user.id %}
+                {% for edu in education_data %}
+                    {% if edu.user == user %}
+                        <div class="media mt-2">
+                            <img src="{% static 'users/university.png' %}" class="mr-3 mt-2 rounded-circle" width="45" height="45">
+                            <div class="media-body">
+                                <div class="float-right">
+                                        <a href="{% url 'edit-edu' edu.id %}"><i class="fas fa-edit"></i> Edit</a>
+                                </div>
+                                    <h5 class="">{{ edu.school }}</h5>
+                                    <h6 class="">{{ edu.degree }}</h6>
+                                    <p class="text-secondary">{{ edu.grad_year }}</p>
+                                    <p class="text-muted">{{ edu.description }}</p>
                             </div>
-                            {% if uid == user.id %}
-                                <h5 class="">{{ edu.school }}</h5>
-                                <h6 class="">{{ edu.degree }}</h6>
-                                <p class="text-secondary">{{ edu.grad_year }}</p>
-                                <p class="text-muted">{{ edu.description }}</p>
-                            {% else %}
-                                <p class="text-secondary">{{ to_user.education_set.all.first }}</p>
-                            {% endif %}
-                        </div>
-                     </div>
-                {% endif %}
-            {% endfor %}
+                         </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h6>{{ to_user.education_set.all.first }}</h6>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 mx-auto mb-3">
+    <div class="card">
+        <div class="card-header"><strong>Work Experience</strong>
+             <div class="float-right">
+                 {% if uid == user.id %}
+                    <a href="{% url 'add-exp' %}"><i class="fas fa-pen"></i> Add</a>
+                 {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            {% if uid == user.id %}
+                {% for exp in exp_data %}
+                    {% if exp.user == user %}
+                        <div class="media mt-2">
+                            <div class="media-body">
+                                <div class="float-right">
+                                    <a href="{% url 'edit-exp' exp.id %}"><i class="fas fa-edit"></i> Edit</a>
+                                </div>
+                                <h5 class="">{{ exp.exp_title }}</h5>
+                                <h6 class="">{{ exp.company }}</h6>
+                                <p class="text-secondary">{{ exp.start_year }} to {{ exp.end_year }}</p>
+                                <p class="text-muted">{{ exp.description }}</p>
+                            </div>
+                         </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h6>{{ to_user.workexperience_set.all.first }}</h6>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -84,30 +115,26 @@
             </div>
         </div>
         <div class="card-body">
-            {% for sk in skill_data %}
-                {% if sk.user == user %}
-                    <div class="media mt-2">
-                        <div class="media-body">
-                            <div class="float-right">
-                                {% if uid == user.id %}
+            {% if uid == user.id %}
+                {% for sk in skill_data %}
+                    {% if sk.user == user %}
+                        <div class="media mt-2">
+                            <div class="media-body">
+                                <div class="float-right">
                                     <a href="{% url 'edit-skill' sk.id %}"><i class="fas fa-edit"></i> Edit</a>
-                                {% endif %}
-                            </div>
-                            <div class="float-right mr-4">
-                                {% if uid == user.id %}
+                                </div>
+                                <div class="float-right mr-4">
                                     <a href="{% url 'delete-skill' sk.id %}"><i class="fas fa-trash"></i> Remove</a>
-                                {% endif %}
+                                </div>
+                                <h6>{{ sk.skill }}</h6>
                             </div>
-                            {% if uid == user.id %}
-                                <h6 class="">{{ sk.skill }}</h6>
-                            {% else %}
-                                <h6 class="">{{ to_user.skill_set.all }}</h6>
-                            {% endif %}
+                         </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h6 class="">{{ to_user.skills_set.all.first }}</h6>
+            {% endif %}
 
-                        </div>
-                     </div>
-                {% endif %}
-            {% endfor %}
         </div>
     </div>
 </div>
@@ -124,21 +151,21 @@
                     <a href="{% url 'edit-int' %}"><i class="fas fa-edit"></i> Edit</a>
                 {% endif %}
             </div>
-            {% for int in interests %}
-                {% if int.user == user %}
-                    <div class="media mt-2">
-                        <div class="media-body">
-                            {% if uid == user.id %}
-                                <h6 class="">Frameworks: {{ int.frameworks }}</h6>
-                                <h6 class="">Languages: {{ int.languages }}</h6>
-                                <h6 class="">Technologies: {{ int.technologies }}</h6>
-                            {% else %}
-                                <h6 class="">{{ to_user.interests }}</h6>
-                            {% endif %}
-                        </div>
-                     </div>
-                {% endif %}
-            {% endfor %}
+            {% if uid == user.id %}
+                {% for int in interests %}
+                    {% if int.user == user %}
+                        <div class="media mt-2">
+                            <div class="media-body">
+                                    <h6 class="">Frameworks: {{ int.frameworks }}</h6>
+                                    <h6 class="">Languages: {{ int.languages }}</h6>
+                                    <h6 class="">Technologies: {{ int.technologies }}</h6>
+                            </div>
+                         </div>
+                    {% endif %}
+                {% endfor %}
+             {% else %}
+                <h6 class="">{{ to_user.interests }}</h6>
+            {% endif %}
         </div>
     </div>
 </div>

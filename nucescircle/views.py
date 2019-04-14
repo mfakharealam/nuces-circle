@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from users.models import User
 from .models import Post
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required but for classes instead
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required for classes
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 
@@ -18,7 +18,7 @@ def home(request):
     # update_form.fields = request.user.post.content
     context = {
         'posts': Post.objects.all(),
-        'create_form': create_form,
+        'create_form': create_form
     }
     return render(request, 'nucescircle/home.html', context)
 

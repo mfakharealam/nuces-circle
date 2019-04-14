@@ -44,6 +44,21 @@ class Education(models.Model):
         return reverse('profile')
 
 
+class WorkExperience(models.Model):
+    exp_title = models.CharField(max_length=255, blank=False)
+    company = models.CharField(max_length=255, blank=True)
+    start_year = models.DateField(blank=True, null=True)
+    end_year = models.DateField(blank=True, null=True)
+    description = models.TextField(max_length=1023, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.exp_title, self.company}'
+
+    def get_absolute_url(self):
+        return reverse('profile')
+
+
 class Interests(models.Model):
     frameworks = models.CharField(max_length=255, blank=True)
     languages = models.CharField(max_length=255, blank=True)

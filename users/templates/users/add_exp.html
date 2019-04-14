@@ -8,10 +8,10 @@
         </div>
         <div class="card-body">
             <div class="content-section">
-                <form method="post" class="form-group" action="{% url 'submit-edu' %}">
+                <form method="post" class="form-group" action="{% url 'submit-exp' %}">
                     {% csrf_token %} <!-- for security purposes -->
                     <fieldset class="form-group">
-                        {{ education_form|crispy }}
+                        {{ exp_form|crispy }}
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-dark" type="submit"><i class="fas fa-pen"></i> Add</button>
