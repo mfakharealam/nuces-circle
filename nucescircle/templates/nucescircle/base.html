@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'nucescircle/newStyling.css' %}">
 </head>
 <body id="gradBg2">
-<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-dark">
+<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-dark shadow-lg">
     <div class="ml-4">
         <label class="navbar-brand text-white ml-5">NUCESCircle</label>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,27 +33,31 @@
             </div>
         </form>
         <form class="form-inline my-2 my-lg-0 ml-auto mr-5">
-            <a class="nav-link mr-sm-3 text-white bg-dark" href="{% url 'circle-home' %}"><i class="fas fa-home"></i> Home</a>
-            <a class="nav-link mr-sm-3 text-white bg-dark" href="{% url 'my-circle' %}"><i class="fas fa-user-plus"></i> My Circle</a>
-            <a class="nav-link mr-sm-3 text-white bg-dark" href="{% url 'circle-jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
-            <a class="nav-link mr-sm-3 text-white bg-dark" href="{% url 'circle-recruit' %}"><i class="fas fa-bullhorn"></i> Recruit</a>
-            <div class="dropdown mr-sm-5">
-                <button class="btn btn-secondary dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user"></i> Me</button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'view-profile' user.id %}">View Profile</a>
-                    <a class="dropdown-item" href="#">Settings</a>
-                    <hr class="my-2">
-                    <a class="dropdown-item" href="{% url 'circle-logout' %}">Log Out</a>
-                </div>
-            </div>
+            <nav class="nav nav-pills">
+                {% with url_name=request.resolver_match.url_name %}
+                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-home' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-home' %}"><i class="fas fa-home"></i> Home</a>
+                    <a class="table-hover text-sm-center nav-link {% if url_name == 'my-circle' %}active{% endif %} mr-sm-3 text-white" href="{% url 'my-circle' %}"><i class="fas fa-user-plus"></i> My Circle</a>
+                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-jobs' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-recruit' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-recruit' %}"><i class="fas fa-bullhorn"></i> Recruit</a>
+
+                    <div class="nav-item dropdown mr-sm-5 shadow-lg">
+                        <a class="btn text-white btn-dark nav-link {% if url_name == 'view-profile' %}active{% endif %} dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> Me</a>
+                        <div class="dropdown-menu bg-dark text-white" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item bg-dark text-white" href="{% url 'view-profile' user.id %}">View Profile</a>
+                            <hr class="my-2 text-white">
+                            <a class="dropdown-item bg-dark text-white" href="{% url 'circle-logout' %}">Log Out</a>
+                        </div>
+                    </div>
+                {% endwith %}
+            </nav>
         </form>
     </div>
 </nav>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
+            <div class="alert alert-{{ message.tags }} shadow-lg">
                 {{ message }}
             </div>
         {% endfor %}
@@ -64,6 +68,10 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
 <script src="{% static 'nucescircle/sampleUsers.js' %}"></script>
 <script src="{% static 'nucescircle/tagsinput.js' %}"></script>
 <script type="text/javascript">

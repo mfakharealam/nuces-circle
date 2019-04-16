@@ -18,7 +18,7 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
     def get_absolute_url(self):
-        return "/users/{}".format(self.slug)
+        return "/users/{}"
 
     def save(self, *args, **kwargs):  # to make the uploading faster
         super(Profile, self).save(*args, **kwargs)

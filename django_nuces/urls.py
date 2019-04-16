@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 from users import views as user_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,13 +47,13 @@ urlpatterns = [
     path('view_profile/int_edit/update', user_views.update_interest_info, name='update-int'),
     # auth
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='circle-login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='circle-logout'),
+    path('logout/', user_views.logout_man, name='circle-logout'),
     # connect user
     path('connect-request/send/<int:uid>/', user_views.send_connect_request, name='send-connect-request'),
     path('connect-request/cancel/<int:uid>/', user_views.cancel_connect_request, name='cancel-connect-request'),
     path('connect-request/accept/<int:uid>/', user_views.accept_connect_request, name='accept-connect-request'),
     path('connect-request/delete/<int:uid>/', user_views.delete_connect_request, name='delete-connect-request'),
-
+    path('connection-delete/<int:uid>/', user_views.delete_friend, name='delete-connection'),
     path('', include('nucescircle.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

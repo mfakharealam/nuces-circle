@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import logout
 from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, EducationForm, InterestsForm, SkillForm, ExperienceForm
 from django.contrib.auth.decorators import login_required
@@ -19,6 +20,12 @@ def register(request):
 
 
 @login_required
+def logout_man(request):
+    logout(request)
+    return redirect('circle-login')
+
+
+@login_required
 def view_profile(request, *args, **kwargs):
     # Education.objects.all().delete()
     uid = int(kwargs['uid'])
@@ -26,7 +33,6 @@ def view_profile(request, *args, **kwargs):
     to_user = User.objects.get(pk=uid)
     p = Profile.objects.get(user=to_user)
     friends = p.friends.all()
-
     # is this user our friend
     button_status = 'none'
     if p not in request.user.profile.friends.all():
@@ -34,6 +40,10 @@ def view_profile(request, *args, **kwargs):
         # if we have sent him a friend request
         if len(UserConnections.objects.filter(from_user=request.user).filter(to_user=p.user)) == 1:
             button_status = 'friend_request_sent'
+        elif len(UserConnections.objects.filter(from_user=p.user).filter(to_user=request.user)) == 1:
+            button_status = 'received_request'
+    elif p in request.user.profile.friends.all():
+        button_status = 'is_friend'
     edu_data = Education.objects.all()
     exp_data = WorkExperience.objects.all()
     interests = Interests.objects.all()
@@ -230,7 +240,7 @@ def users_list(request):
 
 
 @login_required
-def send_connect_request(request, *args, **kwargs):
+def send_connect_request(request, *args, **kwargs):  # on some the other user's profile page
     uid = int(kwargs['uid'])
     user = get_object_or_404(User, id=uid)
     frequest, created = UserConnections.objects.get_or_create(from_user=request.user, to_user=user)  # returns two vals
@@ -251,21 +261,32 @@ def cancel_connect_request(request, *args, **kwargs):
 @login_required
 def accept_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
-    from_user = get_object_or_404(User, id=uid)
+    from_user = User.objects.filter(pk=uid).first()
     frequest = UserConnections.objects.filter(from_user=from_user, to_user=request.user).first()
     user1 = frequest.to_user
     user2 = from_user
     user1.profile.friends.add(user2.profile)
     user2.profile.friends.add(user1.profile)
     frequest.delete()
-    return redirect('/users/{}'.format(request.user.profile.slug))
+    return redirect('my-circle')
 
 
 @login_required
 def delete_connect_request(request, *args, **kwargs):
     uid = int(kwargs['uid'])
-    from_user = get_object_or_404(User, id=uid)
+    from_user = User.objects.filter(pk=uid).first()  # user who sent the request
     frequest = UserConnections.objects.filter(from_user=from_user, to_user=request.user).first()
     frequest.delete()
-    return redirect('/users/{}'.format(request.user.profile.slug))
+    return redirect('my-circle')
 
+
+@login_required
+def delete_friend(request, *args, **kwargs):
+    uid = int(kwargs['uid'])
+
+    from_user = User.objects.filter(pk=uid).first()  # user who sent the request
+    user1 = request.user
+    user2 = from_user
+    user1.profile.friends.remove(user2.profile)
+    user2.profile.friends.remove(user1.profile)
+    return redirect('view-profile', uid=uid)

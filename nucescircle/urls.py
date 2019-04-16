@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import PostListView, CreatePostView, PostDetailView, UpdatePostView, PostDeleteView
+from .views import PostListView, CreatePostView, PostDetailView, \
+    UpdatePostView, PostDeleteView, JobListView, JobDeleteView, CreateJobView
 
 urlpatterns = [
     path('', PostListView.as_view(), name='circle-home'),  # home page
@@ -12,7 +13,9 @@ urlpatterns = [
     path('about/', views.about, name='circle-about'),
     path('my_circle/', views.my_circle, name='my-circle'),
     path('profile_edit/', views.profile_editing, name='circle-editProfile'),
-    path('recruit/', views.recruit, name='circle-recruit'),
+    path('recruit/', JobListView.as_view(), name='circle-recruit'),
+    path('recruit/<int:pk>/delete/', JobDeleteView.as_view(), name='job-delete'),
+    path('recruit/post/new/', CreateJobView.as_view(), name='submit-recruit'),
     path('job_listings/', views.jobs_listing, name='circle-jobs'),
     path('find_people/', views.find_people, name='circle-findPeople'),
     path('search_people/', views.search, name='search'),

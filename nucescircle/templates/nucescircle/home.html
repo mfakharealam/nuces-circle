@@ -4,7 +4,7 @@
 <div class="container-fluid gedf-wrapper">
     <div class="row">
         <div class="col-md-3 mt-4">
-            <div class="card position-sticky">
+            <div class="card position-sticky shadow-lg mb-5 bg-white">
                 <div class="card-body">
                     <div class="h5">@{{user.username}}</div>
                     <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
@@ -26,7 +26,7 @@
         <div class="col-md-6 gedf-main mt-4" id="mainFeed">
 
             <div class="mb-4">
-                <div class="card">
+                <div class="card shadow-lg mb-5 bg-white">
                     <div class="card-header">
                         Write a Post, let everyone know
                     </div>
@@ -46,7 +46,7 @@
                 </div>
             </div>
             {% for post in posts %}
-                <div class="card gedf-card">
+                <div class="card gedf-card shadow-lg mb-5 bg-white">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
@@ -144,7 +144,7 @@
 
         </div>
         <div class="col-md-3 mt-4">
-            <div class="card gedf-card">
+            <div class="card gedf-card shadow-lg mb-5 bg-white">
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -154,7 +154,7 @@
                     <a href="#" class="card-link">Another link</a>
                 </div>
             </div>
-            <div class="card gedf-card mt-4">
+            <div class="card gedf-card mt-4 shadow-lg mb-5 bg-white">
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>

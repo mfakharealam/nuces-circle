@@ -3,7 +3,7 @@
     <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-2 mt-4">
-                <div class="card">
+                <div class="card shadow-lg">
                     <div class="card-body">
                         <div class="h5">@LeeCross</div>
                         <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
@@ -26,34 +26,100 @@
             </div>
 
             <div class="col-md-8 gedf-main mt-4">
-                <div class="card"> <!-- sort of, nesting of cards -->
+                <div class="card shadow-lg"> <!-- sort of, nesting of cards -->
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link active" id="connected-tab" data-toggle="tab" href="#" role="tab" aria-controls="connected" aria-selected="true">Connected</a>
+                        <a class="nav-link active" id="connected-tab" data-toggle="tab" href="#connected" role="tab" aria-controls="connected" aria-selected="true">Connected</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="inv-tab" data-toggle="tab" href="#" role="tab" aria-controls="inv" aria-selected="false">Invitations</a>
+                        <a class="nav-link" id="inv-tab" data-toggle="tab" href="#inv" role="tab" aria-controls="inv" aria-selected="false">Invitations</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="pending-tab" data-toggle="tab" href="#" role="tab" aria-controls="pending" aria-selected="false">Pending</a>
+                        <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="false">Pending</a>
                       </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                      <div class="tab-pane fade show active" id="connected" role="tabpanel" aria-labelledby="connected-tab">
-
+                      <div class="tab-pane fade show active " id="connected" role="tabpanel" aria-labelledby="connected-tab">
+                          <div class="form-inline text-justify">
+                              {% if not friends_list %}
+                                <div class="mx-auto px-3 py-3">
+                                    <h5> No Pending Requests.</h5>
+                                </div>
+                              {% else %}
+                              {% for friend in friends_list %}
+                                  <div class="search-user-card text-center card border-dark mt-4 ml-4 mb-4 shadow-lg">
+                                        <div class="card-header">
+                                            <a href="{% url 'view-profile' friend.user.id %}">
+                                                    <img class="rounded-circle mt-4" src="{{ friend.user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{friend.user.first_name}} {{friend.user.last_name}}</h5>
+                                            <p class="card-text">{{ friend.user.education_set.all.first }}</p>
+                                            <a href="{% url 'view-profile' friend.user.id %}" class="btn btn-outline-dark">View Profile</a>
+                                        </div>
+                                  </div>
+                              {% endfor %}
+                              {% endif %}
+                          </div>
                       </div>
                       <div class="tab-pane fade" id="inv" role="tabpanel" aria-labelledby="inv-tab">
-
+                          <div class="form-inline text-justify">
+                              {% if not rec_friend_requests %}
+                                <div class="mx-auto px-3 py-3">
+                                    <h5> No Pending Requests.</h5>
+                                </div>
+                              {% else %}
+                                  {% for r_request in rec_friend_requests %}
+                                       <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4">
+                                            <div class="card-header">
+                                                <a href="{% url 'view-profile' r_request.from_user.id %}">
+                                                        <img class="rounded-circle mt-4" src="{{ r_request.from_user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
+                                                </a>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{r_request.from_user.first_name}} {{r_request.from_user.last_name}}</h5>
+                                                <p class="card-text">Education Details: {{ r_request.from_user.education_set.all.first }}</p>
+                                                <div class="form-group">
+                                                    <small class="ml-auto mr-2"><a class='btn btn-outline-primary btn-sm' href="{% url 'accept-connect-request'  r_request.from_user.id %}">Accept</a></small>
+                                                    <small class="mr-auto"><a class='btn btn-outline-secondary btn-sm' href="{% url 'delete-connect-request'  r_request.from_user.id %}">Ignore</a></small>
+                                                </div>
+                                            </div>
+                                       </div>
+                                  {% endfor %}
+                              {% endif %}
+                          </div>
                       </div>
                       <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
-
+                          <div class="form-inline text-justify">
+                              {% if not sent_friend_requests %}
+                                <div class="mx-auto px-3 py-3">
+                                    <h5> No Pending Requests.</h5>
+                                </div>
+                              {% else %}
+                              {% for s_request in sent_friend_requests %}
+                                  <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4 shadow-lg">
+                                        <div class="card-header">
+                                            <a href="{% url 'view-profile' s_request.to_user.id %}">
+                                                    <img class="rounded-circle mt-4" src="{{ s_request.to_user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{s_request.to_user.first_name}} {{s_request.to_user.last_name}}</h5>
+                                            <p class="card-text">Education Details: {{ s_request.to_user.education_set.all.first }}</p>
+                                            <a href="{% url 'view-profile' s_request.to_user.id %}" class="btn btn-outline-dark">View Profile</a>
+                                        </div>
+                                  </div>
+                              {% endfor %}
+                              {% endif %}
+                          </div>
                       </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-2 mt-4">
-                <div class="card gedf-card">
+                <div class="card gedf-card shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -63,7 +129,7 @@
                         <a href="#" class="card-link">Another link</a>
                     </div>
                 </div>
-                <div class="card gedf-card mt-4">
+                <div class="card gedf-card mt-4 shadow-lg">
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>

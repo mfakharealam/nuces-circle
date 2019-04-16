@@ -15,11 +15,22 @@
                     <div class="float-right">
                         {% if uid == user.id %}
                             <a href="{% url 'profile' %}"><i class="fas fa-edit"></i> Edit</a>
-                        {% else %}
+                        {% else %} <!-- if not the current logged in user -->
                             {% if button_status == 'not_friend' %}
                                 <a class="btn btn-dark" href="{% url 'send-connect-request' to_user.id %}">Connect</a>
+                            {% elif button_status == 'is_friend' %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-dark dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-check"></i> Connected</button>
+                                        <div class="dropdown-menu bg-dark text-white" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item bg-dark text-white" href="{% url 'delete-connection' to_user.id %}">Delete connection</a>
+                                        </div>
+                                    </div>
                             {% elif button_status == 'friend_request_sent' %}
                                 <a class="btn btn-secondary" href="{% url 'cancel-connect-request'  to_user.id %}">Cancel Request</a>
+                            {% elif button_status == 'received_request' %}
+                                <a class='btn btn-outline-primary btn-sm' href="{% url 'accept-connect-request'  to_user.id %}">Accept</a>
+                                <a class='btn btn-outline-secondary btn-sm' href="{% url 'delete-connect-request'  to_user.id %}">Ignore</a>
                             {% endif %}
                         {% endif %}
 
