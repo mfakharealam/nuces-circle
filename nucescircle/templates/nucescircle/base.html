@@ -22,36 +22,54 @@
     </div>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form method="get" action="{% url 'search' %}">
-            <div class="input-group">
-            <input name="q" class="form-control" placeholder="Search by username..." id="txtQuery">
-            <span class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit" onclick="return validateText('txtQuery')">
-                    <i class="fas fa-search"></i>
-                </button>
-            </span>
-            </div>
-        </form>
-        <form class="form-inline my-2 my-lg-0 ml-auto mr-5">
-            <nav class="nav nav-pills">
-                {% with url_name=request.resolver_match.url_name %}
-                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-home' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-home' %}"><i class="fas fa-home"></i> Home</a>
-                    <a class="table-hover text-sm-center nav-link {% if url_name == 'my-circle' %}active{% endif %} mr-sm-3 text-white" href="{% url 'my-circle' %}"><i class="fas fa-user-plus"></i> My Circle</a>
-                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-jobs' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
-                    <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-recruit' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-recruit' %}"><i class="fas fa-bullhorn"></i> Recruit</a>
-
-                    <div class="nav-item dropdown mr-sm-5 shadow-lg">
-                        <a class="btn text-white btn-dark nav-link {% if url_name == 'view-profile' %}active{% endif %} dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i> Me</a>
-                        <div class="dropdown-menu bg-dark text-white" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item bg-dark text-white" href="{% url 'view-profile' user.id %}">View Profile</a>
-                            <hr class="my-2 text-white">
-                            <a class="dropdown-item bg-dark text-white" href="{% url 'circle-logout' %}">Log Out</a>
-                        </div>
+        {% if request.user.recruiter %}
+            <h3><span class="badge badge-light">Jobs</span></h3>
+            {% with url_name=request.resolver_match.url_name %}
+            <div class="form-inline ml-auto mr-5">
+                <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-recruit' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-recruit' %}"><i class="fas fa-home"></i> Home</a>
+                <div class="nav-item dropdown mr-sm-5 shadow-lg">
+                    <a class="btn text-white btn-dark nav-link {% if url_name == 'view-profile' %}active{% endif %} dropdown-toggle table-hover" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> Me</a>
+                    <div class="dropdown-menu bg-dark text-white" aria-labelledby="dropdownMenuButton1">
+                        <a class="dropdown-item bg-dark text-white" href="{% url 'view-profile' user.id %}">View Profile</a>
+                        <hr class="my-2 text-white">
+                        <a class="dropdown-item bg-dark text-white" href="{% url 'circle-logout' %}">Log Out</a>
                     </div>
-                {% endwith %}
-            </nav>
-        </form>
+                </div>
+            </div>
+            {% endwith %}
+        {% else %}
+            <form method="get" action="{% url 'search' %}">
+                <div class="input-group">
+                <input name="q" class="form-control" placeholder="Search by username..." id="txtQuery">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" onclick="return validateText('txtQuery')">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </span>
+                </div>
+            </form>
+            <form class="form-inline my-2 my-lg-0 ml-auto mr-5">
+                <nav class="nav nav-pills">
+                    {% with url_name=request.resolver_match.url_name %}
+                        <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-home' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-home' %}"><i class="fas fa-home"></i> Home</a>
+                        <a class="table-hover text-sm-center nav-link {% if url_name == 'my-circle' %}active{% endif %} mr-sm-3 text-white" href="{% url 'my-circle' %}"><i class="fas fa-user-plus"></i> My Circle</a>
+                        <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-jobs' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
+                        <!--<a class="table-hover text-sm-center nav-link {% if url_name == 'circle-recruit' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-recruit' %}"><i class="fas fa-bullhorn"></i> Recruit</a>-->
+
+                        <div class="nav-item dropdown mr-sm-5 shadow-lg">
+                            <a class="btn text-white btn-dark nav-link {% if url_name == 'view-profile' %}active{% endif %} dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> Me</a>
+                            <div class="dropdown-menu bg-dark text-white" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item bg-dark text-white" href="{% url 'view-profile' user.id %}">View Profile</a>
+                                <hr class="my-2 text-white">
+                                <a class="dropdown-item bg-dark text-white" href="{% url 'circle-logout' %}">Log Out</a>
+                            </div>
+                        </div>
+                    {% endwith %}
+                </nav>
+            </form>
+        {% endif %}
     </div>
 </nav>
 

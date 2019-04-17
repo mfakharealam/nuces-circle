@@ -1,65 +1,48 @@
 {% extends "nucescircle/base.html" %}
 {% block content %}
-<div>
-        <div class="card mx-auto text-center col-md-11"> <!-- sort of, nesting of cards -->
+<div class="container-fluid gedf-wrapper">
+    <div class="card col-lg-10 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
+        <div class="bg-dark text-white my-3">
             <div class="card-header">
-                <h3>Available Jobs</h3>
+            <h4>Jobs Available</h4>
             </div>
-            <div class="card-body">
+        </div>
+        <div class="card-body"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
+            <div class="row">
+            {% if jobs_posted %}
+                {% for job in jobs_posted %}
 
-                <div class="card mb-3 text-left">
-                    <h5 class="card-header">Job Header</h5>
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>Job Title</strong></h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="text-center">
-                            <a href="#" class="btn btn-outline-dark">Apply Now</a>
+                    <div class="col-sm">
+                        <div class="card job-card text-left mb-3 shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
+                                    <div class="ml-auto mr-2">
+                                        Posted by: <a href="">{{ job.posted_by }}</a>
+                                    </div>
+                                </div>
+                                <!--<p class="card-text">{{ job.job_desc }}</p>-->
+                                <p class="text-muted mr-auto">{{ job.job_field }}</p>
+                                <p class="text-muted">{{ job.job_location }}</p>
+                                <div class="row">
+                                    <button class="btn btn-outline-dark mx-auto">Apply</button>
+                                    <button class="btn btn-outline-dark mx-auto">View Details</button>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
+                                <p class="text-muted float-right">{{ job.date_posted }}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <span class="badge badge-pill badge-dark">Java</span>
-                        <span class="badge badge-pill badge-dark">Dev</span>
-                        <span class="badge badge-pill badge-dark">COBOL</span>
-                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="py-3 mx-auto px-3">
+                    <h4>No Jobs in the Database.</h4>
                 </div>
-
-                <div class="card mb-3 text-left">
-                    <h5 class="card-header">Job Header</h5>
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>Job Title</strong></h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="text-center">
-                            <a href="#" class="btn btn-outline-dark">Apply Now</a>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge badge-pill badge-dark">Java</span>
-                        <span class="badge badge-pill badge-dark">Dev</span>
-                        <span class="badge badge-pill badge-dark">COBOL</span>
-                    </div>
-                </div>
-
-
-                <div class="card mb-3 text-left">
-                    <h5 class="card-header">Job Header</h5>
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>Job Title</strong></h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div class="text-center">
-                            <a href="#" class="btn btn-outline-dark">Apply Now</a>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge badge-pill badge-dark">Java</span>
-                        <span class="badge badge-pill badge-dark">Dev</span>
-                        <span class="badge badge-pill badge-dark">COBOL</span>
-                    </div>
-                </div>
-
-
-
+            {% endif %}
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}

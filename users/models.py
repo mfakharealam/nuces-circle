@@ -29,6 +29,12 @@ class Profile(models.Model):
             profile_img.save(self.image.path)
 
 
+class Recruiter(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    company = models.CharField(max_length=255, blank=False)
+    industry = models.CharField(max_length=255, blank=True)
+
+
 class Education(models.Model):
     school = models.CharField(max_length=255, blank=False)
     degree = models.CharField(max_length=255, blank=True)
@@ -99,4 +105,3 @@ class UserConnections(models.Model):
 
     def __str__(self):
         return "From {}, to {}".format(self.from_user.username, self.to_user.username)
-

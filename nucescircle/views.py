@@ -1,22 +1,28 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from users.models import User, Profile, UserConnections
+from users.models import User, Profile, UserConnections, Recruiter
 from .models import Post, Job
 from .forms import PostForm, JobForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required for classes
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 
-# handle user requests and routes
+class PostListView(UserPassesTestMixin, LoginRequiredMixin, ListView):  # home list view
 
-
-class PostListView(LoginRequiredMixin, ListView):  # home list view
     model = Post
+
     template_name = 'nucescircle/home.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'posts'  # as in def home
     ordering = ['-post_date']  # latest post order
+
+    def test_func(self):
+        if not self.request.user.is_anonymous:
+            rec = Recruiter.objects.filter(user=self.request.user)
+            if rec:
+                redirect('circle-recruit')
+                return False
+            return True
 
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
@@ -28,7 +34,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):  # home list view
     model = Post
 
 
-class CreatePostView(LoginRequiredMixin, CreateView):
+class CreatePostView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Post
     fields = ['content']
     context_object_name = 'form'
@@ -36,6 +42,19 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.post_user = self.request.user
         return super().form_valid(form)
+
+    # def get(self, request, *args, **kwargs):
+    #     rec = Recruiter.objects.filter(user=self.request.user)
+    #     if rec:
+    #         return redirect('circle-recruit')
+    #     else:
+    #         return super(CreatePostView, self).get(request, *args, **kwargs)
+
+    def test_func(self):
+        rec = Recruiter.objects.filter(user=self.request.user)
+        if rec:
+            return False
+        return True
 
 
 class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -48,7 +67,8 @@ class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):  # preventing other users from updating posts
         post = self.get_object()
-        if self.request.user == post.post_user:
+        rec = Recruiter.objects.filter(user=self.request.user)
+        if self.request.user == post.post_user and rec is None:
             return True
         return False
 
@@ -59,7 +79,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):  # preventing other users from updating posts
         post = self.get_object()
-        if self.request.user == post.post_user:
+        rec = Recruiter.objects.filter(user=self.request.user)
+        if self.request.user == post.post_user and rec is None:
             return True
         return False
 
@@ -71,6 +92,9 @@ def about(request):
 
 @login_required
 def my_circle(request):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     p = Profile.objects.get(user=request.user)
     friends = p.friends.all()
     sent_friend_requests = UserConnections.objects.filter(from_user=request.user)
@@ -83,16 +107,22 @@ def my_circle(request):
     return render(request, 'nucescircle/MyCircle.html', context)
 
 
-class JobListView(LoginRequiredMixin, ListView):  # home list view
+class JobListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Job
     template_name = 'nucescircle/Recruit.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'previous_posted_jobs'  # as in def home
+    context_object_name = 'previous_posted_jobs'
     ordering = ['-date_posted']  # latest job order
 
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
         context['job_form'] = JobForm()
         return context
+
+    def test_func(self):
+        rec = Recruiter.objects.filter(user=self.request.user)
+        if rec:
+            return True
+        return False
 
 
 class CreateJobView(LoginRequiredMixin, CreateView):
@@ -104,20 +134,30 @@ class CreateJobView(LoginRequiredMixin, CreateView):
         form.instance.posted_by = self.request.user
         return super().form_valid(form)
 
+    def test_func(self):
+        rec = Recruiter.objects.filter(user=self.request.user)
+        if rec:
+            return True
+        return False
+
 
 class JobDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Job
     success_url = reverse_lazy('circle-recruit')
 
     def test_func(self):  # preventing other users from updating posts
+        rec = Recruiter.objects.filter(user=self.request.user)
         job = self.get_object()
-        if self.request.user == job.posted_by:
+        if self.request.user == job.posted_by and rec:
             return True
         return False
 
 
 @login_required
 def find_people(request):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     return render(request, 'nucescircle/findPeople2.html')
 
 
@@ -127,7 +167,12 @@ def login(request):
 
 @login_required
 def jobs_listing(request):
-    return render(request, 'nucescircle/JobsListing.html')
+    rec = Recruiter.objects.filter(user=request.user)
+    jobs = Job.objects.all()
+    context = {'jobs_posted': jobs}
+    if rec:
+        return redirect('circle-recruit')
+    return render(request, 'nucescircle/JobsListing.html', context)
 
 
 @login_required

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout
-from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, EducationForm, InterestsForm, SkillForm, ExperienceForm
+from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience, Recruiter
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, \
+    EducationForm, InterestsForm, SkillForm, ExperienceForm, RecruiterRegForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -14,9 +15,39 @@ def register(request):
             username = form.cleaned_data.get('username')  # When data is cleaned it is converted to appropriate type
             messages.success(request, f'Account created for {username}!')
             return redirect('circle-login')
+        else:
+            return redirect('register')
     else:
         form = UserRegisterForm()
-        return render(request, 'users/register.html', {'form': form})
+        recruiter_form = RecruiterRegForm()
+        return render(request, 'users/register.html', {'form': form, 'recruiter_form': recruiter_form})
+
+
+def register_recruiter(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        recruiter_form = RecruiterRegForm(request.POST)
+        if form.is_valid() and recruiter_form.is_valid():
+            form.save()
+            the_user = form.instance
+            rf = recruiter_form.save(commit=False)
+            rf.user = the_user
+            rf.save()
+            username = form.cleaned_data.get('username')  # When data is cleaned it is converted to appropriate type
+            messages.success(request, f'Account created for {username}!')
+            return redirect('circle-login')
+    else:
+        form = UserRegisterForm()
+        recruiter_form = RecruiterRegForm()
+
+    return render(request, 'users/register.html', {'form': form, 'recruiter_form': recruiter_form})
+
+
+def check_user(request):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
+    return redirect('circle-home')
 
 
 @login_required
@@ -160,7 +191,7 @@ def submit_exp_info(request):
 
 @login_required
 def edit_interest_info(request):
-    int_data = Interests.objects.filter(user=request.user)
+    int_data = Interests.objects.filter(user=request.user).first()
     int_form = InterestsForm(instance=int_data)
     return render(request, 'users/edit_int.html', context={'int_form': int_form,
                                                            'int_data': int_data})
@@ -241,6 +272,9 @@ def users_list(request):
 
 @login_required
 def send_connect_request(request, *args, **kwargs):  # on some the other user's profile page
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     uid = int(kwargs['uid'])
     user = get_object_or_404(User, id=uid)
     frequest, created = UserConnections.objects.get_or_create(from_user=request.user, to_user=user)  # returns two vals
@@ -249,6 +283,9 @@ def send_connect_request(request, *args, **kwargs):  # on some the other user's 
 
 @login_required
 def cancel_connect_request(request, *args, **kwargs):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     uid = int(kwargs['uid'])
     user = get_object_or_404(User, id=uid)
     frequest = UserConnections.objects.filter(
@@ -260,6 +297,9 @@ def cancel_connect_request(request, *args, **kwargs):
 
 @login_required
 def accept_connect_request(request, *args, **kwargs):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     uid = int(kwargs['uid'])
     from_user = User.objects.filter(pk=uid).first()
     frequest = UserConnections.objects.filter(from_user=from_user, to_user=request.user).first()
@@ -273,6 +313,9 @@ def accept_connect_request(request, *args, **kwargs):
 
 @login_required
 def delete_connect_request(request, *args, **kwargs):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     uid = int(kwargs['uid'])
     from_user = User.objects.filter(pk=uid).first()  # user who sent the request
     frequest = UserConnections.objects.filter(from_user=from_user, to_user=request.user).first()
@@ -282,6 +325,9 @@ def delete_connect_request(request, *args, **kwargs):
 
 @login_required
 def delete_friend(request, *args, **kwargs):
+    rec = Recruiter.objects.filter(user=request.user)
+    if rec:
+        return redirect('circle-recruit')
     uid = int(kwargs['uid'])
 
     from_user = User.objects.filter(pk=uid).first()  # user who sent the request

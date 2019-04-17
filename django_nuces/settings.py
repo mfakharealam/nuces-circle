@@ -132,5 +132,5 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'circle-home'
+LOGIN_REDIRECT_URL = 'circle-checking'
 LOGIN_URL = 'circle-login'

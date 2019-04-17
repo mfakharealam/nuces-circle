@@ -2,6 +2,30 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="container-fluid gedf-wrapper">
+
+<div class="row">
+    <div class="col-md-3 mt-4">
+            <div class="card position-sticky shadow-lg mb-5 bg-white">
+                <div class="card-body">
+                    <div class="h5">@{{user.username}}</div>
+                    <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
+                    <div class="h7">Interests: {{ user.interests }}</div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Posted Jobs</div>
+                        <div class="h5">51</div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Job Responses</div>
+                        <div class="h5">6758</div>
+                    </li>
+                    <li class="list-group-item">How you doin'?</li>
+                </ul>
+            </div>
+        </div>
+
     <div class="card col-md-5 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
         <div class="bg-dark text-white my-3">
             <div class="card-header">
@@ -72,35 +96,65 @@
             </form>
         </div>
     </div>
+<div class="col-md-3 mt-4">
+            <div class="card gedf-card shadow-lg mb-5 bg-white">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+            <div class="card gedf-card mt-4 shadow-lg mb-5 bg-white">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        </div>
 
-    <div class="card col-md-5 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
+</div>
+</div>
+
+    <div class="card col-md-10 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
         <div class="bg-dark text-white my-3">
             <div class="card-header">
             <h4>Jobs Posted Earlier</h4>
             </div>
         </div>
-        <div class="card-body mx-auto"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
+        <div class="card-body"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
+            <div class="row">
             {% if previous_posted_jobs %}
                 {% for job in previous_posted_jobs %}
-                    <div class="card text-left">
-                        <div class="card-body">
-                            <div class="row">
-                                <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
-                                <div class="ml-auto mr-2">
-                                    <a href="" data-toggle="modal" data-target="#deleteJobModal">
-                                        <i class="fas fa-trash"></i> Remove</a>
+                    {% if request.user == job.posted_by %}
+                        <div class="col-md-4">
+                            <div class="card job-card text-left mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
+                                        <div class="ml-auto mr-2">
+                                            <a href="" data-toggle="modal" data-target="#deleteJobModal">
+                                                <i class="fas fa-trash"></i> Remove</a>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">{{ job.job_desc }}</p>
+                                    <p class="text-muted mr-auto">{{ job.job_field }}</p>
+                                    <p class="text-muted">{{ job.job_location }}</p>
+
+                                </div>
+                                <div class="card-footer">
+                                    <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
+                                    <p class="text-muted float-right">{{ job.date_posted }}</p>
                                 </div>
                             </div>
-                            <p class="card-text">{{ job.job_desc }}</p>
-                            <p class="text-muted mr-auto">{{ job.job_field }}</p>
-                            <p class="text-muted">{{ job.job_location }}</p>
-
                         </div>
-                        <div class="card-footer">
-                            <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
-                            <p class="text-muted float-right">{{ job.date_posted }}</p>
-                        </div>
-                    </div>
+                    {% endif %}
                     <form method="post" class="form-group" action="{% url 'job-delete' job.id %}">
                         {% csrf_token %}
                         <div class="modal fade" id="deleteJobModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -126,11 +180,11 @@
                     </form>
                 {% endfor %}
             {% else %}
-                <div class="py-3 px-3">
+                <div class="py-3 mx-auto px-3">
                     <h4>Start recruiting, why you have not started yet.</h4>
                 </div>
             {% endif %}
-
+            </div>
         </div>
     </div>
 

@@ -111,6 +111,10 @@ select::-ms-expand {
     width: 16rem;
 }
 
+.job-card{
+    width: 21rem;
+}
+
 .post-img {
   height: 65px;
   width: 65px;

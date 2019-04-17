@@ -1,7 +1,13 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Education, Interests, Skills, WorkExperience
+from .models import Profile, Education, Interests, Skills, WorkExperience, Recruiter
+
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
 
 
 class UserRegisterForm(UserCreationForm):  # inheriting from UserCreationForm
@@ -20,6 +26,15 @@ class UserRegisterForm(UserCreationForm):  # inheriting from UserCreationForm
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+
+class RecruiterRegForm(forms.ModelForm):
+    company = forms.CharField(required=True)
+    industry = forms.CharField(required=True)
+
+    class Meta:
+        model = Recruiter
+        fields = ['company', 'industry']
 
 
 class UserUpdateForm(forms.ModelForm):

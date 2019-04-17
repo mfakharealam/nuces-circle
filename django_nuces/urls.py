@@ -24,6 +24,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
+    path('rec_register/', user_views.register_recruiter, name='recruiter-register'),
     path('profile/', user_views.profile, name='profile'),
     path('view_profile/current-user-id=<int:uid>/', user_views.view_profile, name='view-profile'),
     # education
@@ -48,6 +49,7 @@ urlpatterns = [
     # auth
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='circle-login'),
     path('logout/', user_views.logout_man, name='circle-logout'),
+    path('check/', user_views.check_user, name='circle-checking'),
     # connect user
     path('connect-request/send/<int:uid>/', user_views.send_connect_request, name='send-connect-request'),
     path('connect-request/cancel/<int:uid>/', user_views.cancel_connect_request, name='cancel-connect-request'),

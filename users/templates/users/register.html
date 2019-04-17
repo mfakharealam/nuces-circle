@@ -3,46 +3,104 @@
 {% block content %}
 <div class="container vertical-center">
     <div class="mx-auto col-md-8">
-        <div class="card bg-dark mt-4 mb-4">
+        <div class="card bg-dark mt-4 mb-4 shadow-lg">
             <div class="card-header text-center"><h2 class="text-white">Register</h2></div>
             <div class="card-body text-center">
                 <p class="text-white">Join our Circle - it's free.</p>
                 <hr class="my-4 bg-white">
-                <form method="post" class="form-group col-11 mx-auto">
-                    {% csrf_token %} <!-- for security purposes -->
-                    <fieldset class="form-group text-white">
-                       <!-- {{ form|crispy }} -->
-                        <div class="row">
-                          <div class="col-6">
-                            {{ form.username|as_crispy_field }}
-                          </div>
-                          <div class="col-6">
-                            {{ form.email|as_crispy_field }}
-                          </div>
+
+                <nav>
+                  <div class="nav nav-tabs nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item bg-secondary text-white nav-link active" id="nav-student-tab" data-toggle="tab" href="#nav-student" role="tab" aria-controls="nav-student" aria-selected="true">Student</a>
+                    <a class="nav-item bg-secondary text-white nav-link" id="nav-recruiter-tab" data-toggle="tab" href="#nav-recruiter" role="tab" aria-controls="nav-recrutier" aria-selected="false">Recruiter</a>
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="nav-student" role="tabpanel" aria-labelledby="nav-student-tab">
+                      <form method="post" class="form-group col-11 mx-auto" action="{% url 'register' %}">
+                        {% csrf_token %} <!-- for security purposes -->
+                        <fieldset class="form-group text-white">
+                           <!-- {{ form|crispy }} -->
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.username|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.email|as_crispy_field }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.first_name|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.last_name|as_crispy_field }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.password1|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.password2|as_crispy_field }}
+                              </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-light" type="submit">
+                                Sign Up
+                            </button>
                         </div>
-                        <div class="row">
-                          <div class="col-6">
-                            {{ form.first_name|as_crispy_field }}
-                          </div>
-                          <div class="col-6">
-                            {{ form.last_name|as_crispy_field }}
-                          </div>
+                    </form>
+                  </div>
+                  <div class="tab-pane fade" id="nav-recruiter" role="tabpanel" aria-labelledby="nav-recruiter-tab">
+                      <form method="post" class="form-group col-11 mx-auto" action="{% url 'recruiter-register' %}">
+                        {% csrf_token %} <!-- for security purposes -->
+                        <fieldset class="form-group text-white">
+                           <!-- {{ form|crispy }} -->
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.username|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.email|as_crispy_field }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.first_name|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.last_name|as_crispy_field }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-6">
+                                {{ form.password1|as_crispy_field }}
+                              </div>
+                              <div class="col-6">
+                                {{ form.password2|as_crispy_field }}
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    {{ recruiter_form.company|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                    {{ recruiter_form.industry|as_crispy_field }}
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-light" type="submit">
+                                Sign Up
+                            </button>
                         </div>
-                        <div class="row">
-                          <div class="col-6">
-                            {{ form.password1|as_crispy_field }}
-                          </div>
-                          <div class="col-6">
-                            {{ form.password2|as_crispy_field }}
-                          </div>
-                        </div>
-                    </fieldset>
-                    <div class="form-group">
-                        <button class="btn btn-outline-light" type="submit">
-                            Sign Up
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                  </div>
+                </div>
+
+
                 <div class="border-top pt-3">
                     <small class="text-muted">
                         Already Have An Account?
