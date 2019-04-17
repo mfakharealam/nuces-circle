@@ -36,3 +36,20 @@ class Job(models.Model):
     def get_absolute_url(self):
         return reverse('circle-recruit')
 
+
+JOB_APP_ACCEPTED = 1
+JOB_APP_PENDING = 2
+JOB_APP_STATUSES = (
+    (JOB_APP_ACCEPTED, 'Accepted'),
+    (JOB_APP_PENDING, 'Pending'),
+)
+
+
+class JobApplications(models.Model):
+    applicant = models.ForeignKey(User, related_name='applicant', on_delete=models.CASCADE)
+    job_applied_for = models.ForeignKey(Job, related_name='job_applied_for', on_delete=models.CASCADE)  # has the hirer
+    job_app_status = models.IntegerField(choices=JOB_APP_STATUSES, default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "From {}, to {}".format(self.applicant.username, self.job_applied_for.job_title)

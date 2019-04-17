@@ -3,27 +3,24 @@
     <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-2 mt-4">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <div class="h5">@LeeCross</div>
-                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
-                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
-                            etc.
-                        </div>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="h6 text-muted">Followers</div>
-                            <div class="h5">52342</div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="h6 text-muted">Following</div>
-                            <div class="h5">6758</div>
-                        </li>
-                        <li class="list-group-item">How you doin'?</li>
-                    </ul>
+            <div class="card position-sticky shadow-lg mb-5 bg-white">
+                <div class="card-body">
+                    <div class="h5">@{{user.username}}</div>
+                    <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
+                    <div class="h7">Interests: {{ user.interests }}</div>
                 </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Connections</div>
+                        <div class="h5">{{ friends_list|length }}</div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">Connect Requests</div>
+                        <div class="h5">{{ rec_friend_requests|length }}</div>
+                    </li>
+                </ul>
             </div>
+        </div>
 
             <div class="col-md-8 gedf-main mt-4">
                 <div class="card shadow-lg"> <!-- sort of, nesting of cards -->

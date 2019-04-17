@@ -133,6 +133,11 @@ select::-ms-expand {
     position: -webkit-sticky;
     position: sticky;
 }
+
+.Fixed
+{
+    position: fixed;
+}
 /*
 .dropdown:hover > .dropdown-menu {
     display: block;

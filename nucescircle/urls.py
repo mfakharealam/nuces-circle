@@ -19,4 +19,5 @@ urlpatterns = [
     path('job_listings/', views.jobs_listing, name='circle-jobs'),
     path('find_people/', views.find_people, name='circle-findPeople'),
     path('search_people/', views.search, name='search'),
+    path('recruit/<int:jid>/apply/', views.add_job_applicant, name='add-job-applicant')
 ]

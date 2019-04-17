@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from users.models import User, Profile, UserConnections, Recruiter
-from .models import Post, Job
+from .models import Post, Job, JobApplications
 from .forms import PostForm, JobForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required for classes
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -27,6 +27,11 @@ class PostListView(UserPassesTestMixin, LoginRequiredMixin, ListView):  # home l
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
         context['create_form'] = PostForm()
+        p = Profile.objects.filter(user=self.request.user).first()
+        connected_users = p.friends.all().count()
+        req = UserConnections.objects.filter(to_user=self.request.user).count()
+        context['connected_count'] = connected_users
+        context['requests_count'] = req
         return context
 
 
@@ -169,7 +174,8 @@ def login(request):
 def jobs_listing(request):
     rec = Recruiter.objects.filter(user=request.user)
     jobs = Job.objects.all()
-    context = {'jobs_posted': jobs}
+    applied_jobs = JobApplications.objects.filter(applicant=request.user).values_list('job_applied_for', flat=True)
+    context = {'jobs_posted': jobs, 'applied_jobs': applied_jobs}
     if rec:
         return redirect('circle-recruit')
     return render(request, 'nucescircle/JobsListing.html', context)
@@ -180,7 +186,17 @@ def profile_editing(request):
     return render(request, 'nucescircle/profileEditing.html')
 
 
+@login_required
 def search(request):
     filter_by = request.GET["q"]
     user_objects = User.objects.filter(username__contains=filter_by).prefetch_related('education_set')
     return render(request, 'nucescircle/results.html', {'result': user_objects})
+
+
+@login_required
+def add_job_applicant(request, *args, **kwargs):
+    job_id = int(kwargs['jid'])
+    applicant = request.user
+    job = get_object_or_404(Job, pk=job_id)
+    app, created = JobApplications.objects.get_or_create(applicant=applicant, job_applied_for=job)
+    return redirect('circle-jobs')

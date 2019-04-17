@@ -4,24 +4,23 @@
 <div class="container-fluid gedf-wrapper">
     <div class="row">
         <div class="col-md-3 mt-4">
-            <div class="card position-sticky shadow-lg mb-5 bg-white">
-                <div class="card-body">
-                    <div class="h5">@{{user.username}}</div>
-                    <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
-                    <div class="h7">Interests: {{ user.interests }}</div>
+                <div class="card position-sticky shadow-lg mb-5 bg-white">
+                    <div class="card-body">
+                        <div class="h5">@{{user.username}}</div>
+                        <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
+                        <div class="h7">Interests: {{ user.interests }}</div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Connections</div>
+                            <div class="h5">{{ connected_count }}</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Connect Requests</div>
+                            <div class="h5">{{ requests_count }}</div>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="h6 text-muted">Connections</div>
-                        <div class="h5">51</div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="h6 text-muted">Requests</div>
-                        <div class="h5">6758</div>
-                    </li>
-                    <li class="list-group-item">How you doin'?</li>
-                </ul>
-            </div>
         </div>
         <div class="col-md-6 gedf-main mt-4" id="mainFeed">
 

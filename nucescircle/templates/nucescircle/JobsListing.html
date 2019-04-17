@@ -1,46 +1,75 @@
 {% extends "nucescircle/base.html" %}
 {% block content %}
 <div class="container-fluid gedf-wrapper">
-    <div class="card col-lg-10 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
-        <div class="bg-dark text-white my-3">
-            <div class="card-header">
-            <h4>Jobs Available</h4>
+    <div class="row">
+        <div class="col-md-3 mt-4">
+            <div class="Fixed">
+                <div class="card position-sticky shadow-lg mb-5 bg-white">
+                    <div class="card-body">
+                        <div class="h5">@{{user.username}}</div>
+                        <div class="h6 text-muted">{{user.first_name}} {{user.last_name}}</div>
+                        <div class="h7">Interests: {{ user.interests }}</div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Jobs Applied</div>
+                            <div class="h5">{{ applied_jobs|length }}</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Jobs Available</div>
+                            <div class="h5">{{ jobs_posted|length }}</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="card-body"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
-            <div class="row">
-            {% if jobs_posted %}
-                {% for job in jobs_posted %}
-
-                    <div class="col-sm">
-                        <div class="card job-card text-left mb-3 shadow-sm">
-                            <div class="card-body">
-                                <div class="row">
-                                    <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
-                                    <div class="ml-auto mr-2">
-                                        Posted by: <a href="">{{ job.posted_by }}</a>
+        <div class="card col-lg-8 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
+            <div class="bg-dark text-white my-3">
+                 <div class="card-header">
+                    <h4>Available Jobs</h4>
+                </div>
+            </div>
+            <div class="card-body"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
+                <div class="row mx-auto">
+                {% if jobs_posted %}
+                    {% for job in jobs_posted %}
+                        {% if job.id not in applied_jobs %}
+                            <div class="col-md-6">
+                                <div class="card job-card text-left mb-3 shadow-sm mx-auto">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
+                                            <div class="ml-auto mr-2">
+                                                Posted by: <a href="">{{ job.posted_by }}</a>
+                                            </div>
+                                        </div>
+                                        <!--<p class="card-text">{{ job.job_desc }}</p>-->
+                                        <p class="text-muted mr-auto">{{ job.job_field }}</p>
+                                        <p class="text-muted">{{ job.job_location }}</p>
+                                        <div class="row">
+                                           <div class="mx-auto">
+                                                <form method="post" action="{% url 'add-job-applicant' job.id %}">
+                                                    {% csrf_token %}
+                                                    <button class="btn btn-outline-dark" type="submit">Apply</button>
+                                                </form>
+                                           </div>
+                                            <button class="btn btn-outline-dark mx-auto">View Details</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
+                                        <p class="text-muted float-right">{{ job.date_posted }}</p>
                                     </div>
                                 </div>
-                                <!--<p class="card-text">{{ job.job_desc }}</p>-->
-                                <p class="text-muted mr-auto">{{ job.job_field }}</p>
-                                <p class="text-muted">{{ job.job_location }}</p>
-                                <div class="row">
-                                    <button class="btn btn-outline-dark mx-auto">Apply</button>
-                                    <button class="btn btn-outline-dark mx-auto">View Details</button>
-                                </div>
                             </div>
-                            <div class="card-footer">
-                                <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
-                                <p class="text-muted float-right">{{ job.date_posted }}</p>
-                            </div>
-                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="py-3 mx-auto px-3">
+                        <h4>No Jobs in the Database.</h4>
                     </div>
-                {% endfor %}
-            {% else %}
-                <div class="py-3 mx-auto px-3">
-                    <h4>No Jobs in the Database.</h4>
+                {% endif %}
                 </div>
-            {% endif %}
             </div>
         </div>
     </div>
