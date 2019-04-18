@@ -26,9 +26,9 @@ JOB_CHOICES = (
 
 class Job(models.Model):
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    job_title = models.CharField(max_length=32, blank=True)
-    job_desc = models.TextField(blank=True)
-    job_location = models.CharField(max_length=32, blank=True)
+    job_title = models.CharField(max_length=32, blank=False)
+    job_desc = models.TextField(blank=False)
+    job_location = models.CharField(max_length=32, blank=False)
     job_field = models.CharField(max_length=6, blank=True)
     job_tags = models.CharField(max_length=255, blank=True)
     date_posted = models.DateTimeField(default=timezone.now)
