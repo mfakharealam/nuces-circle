@@ -4,19 +4,21 @@
     <div class="form-inline text-justify">
     {% if result %}
         {% for user in result %}
-            <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4">
-                <div class="card-header">
-                    <a href="{% url 'view-profile' user.id %}">
-                            <img class="rounded-circle mt-4" src="{{ user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
-                    </a>
+            {% if not user.recruiter %}
+                <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4">
+                    <div class="card-header">
+                        <a href="{% url 'view-profile' user.id %}">
+                                <img class="rounded-circle mt-4" src="{{ user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
+                        <p class="card-text">Education Details: {{ user.education_set.all.first }}</p>
+                        <p class="card-text">Interests: {{ user.interests }}</p>
+                        <a href="{% url 'view-profile' user.id %}" class="btn btn-outline-dark">View Profile</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
-                    <p class="card-text">Education Details: {{ user.education_set.all.first }}</p>
-                    <p class="card-text">Interests: {{ user.interests }}</p>
-                    <a href="{% url 'view-profile' user.id %}" class="btn btn-outline-dark">View Profile</a>
-                </div>
-            </div>
+            {% endif %}
         {% endfor %}
     {% else %}
         <div>

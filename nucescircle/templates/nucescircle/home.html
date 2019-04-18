@@ -65,10 +65,10 @@
                                     </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                             <div class="h6 dropdown-header">Configuration</div>
-                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#createPostModal">
+                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#createPostModal{{post.id}}">
                                                     Edit
                                                 </a>
-                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#deletePostModal">
+                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#deletePostModal{{post.id}}">
                                                     Delete
                                                 </a>
                                         </div>
@@ -76,7 +76,7 @@
 
                                 <form method="post" class="form-group" action="{% url 'post-update' post.id %}">
                                 {% csrf_token %} <!-- for security purposes -->
-                                    <div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="createPostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
                                       <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -100,7 +100,7 @@
                                 </form>
                                 <form method="post" class="form-group" action="{% url 'post-delete' post.id %}">
                                     {% csrf_token %}
-                                    <div class="modal fade" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="deletePostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                       <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                           <div class="modal-header">

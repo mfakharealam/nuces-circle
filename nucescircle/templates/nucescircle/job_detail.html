@@ -1,0 +1,108 @@
+{% extends "nucescircle/base.html" %}
+{% block content %}
+<div class="col-md-6 mx-auto gedf-main mt-4">
+    <div class="card gedf-card shadow-lg">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div class="ml-2">
+                        <div class="h5 m-0">{{ object.job_title }}</div>
+                        <div class="h7 text-muted">@{{object.posted_by}}</div>
+                    </div>
+                </div>
+                <div class="ml-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                <div class="h6 dropdown-header">Configuration</div>
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#deleteJobModal{{object.id}}"
+                                       href="">Delete</a>
+                            </div>
+                    </div>
+                </div>
+                <div>
+                    <form method="post" class="form-group" action="{% url 'job-delete' object.id %}">
+                        {% csrf_token %}
+                        <div class="modal fade" id="deleteJobModal{{object.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Delete Job</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <strong>{{ object.job_title }}</strong>
+                                  <p class="text-muted"> Posted on: {{ object.date_posted }} </p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body ml-3">
+            <p class="card-text">
+                {{object.job_desc}}
+            </p>
+            <p class="card-text">
+                {{ object.job_field }}
+            </p>
+            <div class="row"><i class="fas fa-map-marker-alt text-muted"> {{ object.job_location }}</i></div>
+        </div>
+        <div class="card-footer">
+            <div class="text-muted h7 mb-2"> <i class="fas fa-clock"></i> {{object.date_posted}}</div>
+            <div>
+                People applied: {{ this_job_app_count }}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+ <div class="card col-md-10 mx-auto text-center my-4 shadow-lg rounded"> <!-- sort of, nesting of cards -->
+        <div class="bg-dark text-white my-3">
+            <div class="card-header">
+            <h4>List of Applicants</h4>
+            </div>
+        </div>
+        <div class="card-body"><!-- 'job_title', 'job_desc', 'job_location', 'job_field', 'job_tags' -->
+            <div class="row">
+            {% if this_job_app_count > 0 %}
+                {% for applicant in all_users %}
+                    {% if applicant.id in this_job_apps %}
+                        <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4">
+                            <div class="card-header">
+                                <a href="{% url 'view-profile' applicant.id %}">
+                                        <img class="rounded-circle mt-4" src="{{ applicant.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{applicant.first_name}} {{applicant.last_name}}</h5>
+                                <p class="card-text">Education Details: {{ applicant.education_set.all.first }}</p>
+                                <p class="card-text">Interests: {{ applicant.interests }}</p>
+                                <a href="{% url 'view-profile' applicant.id %}" class="btn btn-outline-dark">View Profile</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="py-3 mx-auto px-3">
+                    <h4>No user has applied for this job yet.</h4>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

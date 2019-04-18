@@ -72,8 +72,8 @@ class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):  # preventing other users from updating posts
         post = self.get_object()
-        rec = Recruiter.objects.filter(user=self.request.user)
-        if self.request.user == post.post_user and rec is None:
+        # rec = Recruiter.objects.filter(user=self.request.user)
+        if self.request.user == post.post_user:
             return True
         return False
 
@@ -84,8 +84,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):  # preventing other users from updating posts
         post = self.get_object()
-        rec = Recruiter.objects.filter(user=self.request.user)
-        if self.request.user == post.post_user and rec is None:
+        if self.request.user == post.post_user:
             return True
         return False
 
@@ -121,6 +120,9 @@ class JobListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(JobListView, self).get_context_data(**kwargs)
         context['job_form'] = JobForm()
+        context['previous_posted_jobs'] = Job.objects.filter(posted_by=self.request.user)  # by this user
+        rec_job_app = JobApplications.objects.filter(job_applied_for__posted_by=self.request.user)
+        context['rec_job_app'] = rec_job_app
         return context
 
     def test_func(self):
@@ -149,6 +151,28 @@ class CreateJobView(LoginRequiredMixin, CreateView):
 class JobDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Job
     success_url = reverse_lazy('circle-recruit')
+
+    def test_func(self):  # preventing other users from updating posts
+        rec = Recruiter.objects.filter(user=self.request.user)
+        job = self.get_object()
+        if self.request.user == job.posted_by and rec:
+            return True
+        return False
+
+
+class JobDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Job
+    template_name = 'nucescircle/job_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(JobDetailView, self).get_context_data(**kwargs)
+        this_job_app_count = JobApplications.objects.filter(job_applied_for__pk=self.object.id).count()
+        this_job_app = JobApplications.objects.filter(job_applied_for__pk=self.object.id).\
+            values_list('applicant', flat=True)
+        context['this_job_app_count'] = this_job_app_count
+        context['this_job_apps'] = this_job_app
+        context['all_users'] = User.objects.all()
+        return context
 
     def test_func(self):  # preventing other users from updating posts
         rec = Recruiter.objects.filter(user=self.request.user)
@@ -198,5 +222,7 @@ def add_job_applicant(request, *args, **kwargs):
     job_id = int(kwargs['jid'])
     applicant = request.user
     job = get_object_or_404(Job, pk=job_id)
-    app, created = JobApplications.objects.get_or_create(applicant=applicant, job_applied_for=job)
+    app, created = JobApplications.objects.get_or_create(applicant=applicant,
+                                                         job_applied_for=job)
+                                                         # job_poster=job.posted_by)
     return redirect('circle-jobs')

@@ -14,12 +14,12 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <div class="h6 text-muted">Posted Jobs</div>
-                        <div class="h5">51</div>
+                        <div class="h6 text-muted">Jobs Posted</div>
+                        <div class="h5">{{ previous_posted_jobs|length }}</div>
                     </li>
                     <li class="list-group-item">
                         <div class="h6 text-muted">Job Responses</div>
-                        <div class="h5">6758</div>
+                        <div class="h5">{{ rec_job_app|length }}</div>
                     </li>
                     <li class="list-group-item">How you doin'?</li>
                 </ul>
@@ -37,15 +37,15 @@
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <div class="row">
-                          <div class="col-md-6 ml-auto">
+                          <div class="col-md-6 ml-auto required">
                             {{ job_form.job_title|as_crispy_field }}
                           </div>
-                         <div class="col-md-6 mr-auto">
+                         <div class="col-md-6 mr-auto required">
                             {{ job_form.job_location|as_crispy_field }}
                           </div>
                         </div>
                         <div class="row">
-                        <div class="col-md-6 ml-auto">
+                        <div class="col-md-6 ml-auto required">
                             {{ job_form.job_field|as_crispy_field }}
                           </div>
                         <div class="col-md-6 mr-auto">
@@ -132,21 +132,30 @@
             <div class="row">
             {% if previous_posted_jobs %}
                 {% for job in previous_posted_jobs %}
-                    {% if request.user == job.posted_by %}
+
                         <div class="col-md-4">
                             <div class="card job-card text-left mb-3">
                                 <div class="card-body">
                                     <div class="row">
                                         <h5 class="card-title mr-auto ml-2"><strong>{{ job.job_title }}</strong></h5>
-                                        <div class="ml-auto mr-2">
-                                            <a href="" data-toggle="modal" data-target="#deleteJobModal">
-                                                <i class="fas fa-trash"></i> Remove</a>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                                <div class="h6 dropdown-header">Configuration</div>
+                                                    <a class="dropdown-item" href="{% url 'job-detail' job.id %}">
+                                                        View Details
+                                                    </a>
+                                                    <a class="dropdown-item" data-toggle="modal" data-target="#deleteJobModal{{job.id}}"
+                                                           href="">Delete</a>
+                                            </div>
                                         </div>
                                     </div>
                                     <p class="card-text">{{ job.job_desc }}</p>
-                                    <p class="text-muted mr-auto">{{ job.job_field }}</p>
-                                    <p class="text-muted">{{ job.job_location }}</p>
-
+                                    <div class="row">
+                                        <i class="fas fa-map-marker-alt text-muted"> {{ job.job_location }}</i>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                     <span class="badge badge-pill badge-dark">{{ job.job_tags }}</span>
@@ -154,10 +163,10 @@
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
+
                     <form method="post" class="form-group" action="{% url 'job-delete' job.id %}">
                         {% csrf_token %}
-                        <div class="modal fade" id="deleteJobModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteJobModal{{job.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">

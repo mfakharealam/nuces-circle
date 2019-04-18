@@ -3,7 +3,7 @@
 <div class="container-fluid gedf-wrapper">
     <div class="row">
         <div class="col-md-3 mt-4">
-            <div class="Fixed">
+            <div class="">
                 <div class="card position-sticky shadow-lg mb-5 bg-white">
                     <div class="card-body">
                         <div class="h5">@{{user.username}}</div>
@@ -33,7 +33,6 @@
                 <div class="row mx-auto">
                 {% if jobs_posted %}
                     {% for job in jobs_posted %}
-                        {% if job.id not in applied_jobs %}
                             <div class="col-md-6">
                                 <div class="card job-card text-left mb-3 shadow-sm mx-auto">
                                     <div class="card-body">
@@ -44,16 +43,20 @@
                                             </div>
                                         </div>
                                         <!--<p class="card-text">{{ job.job_desc }}</p>-->
-                                        <p class="text-muted mr-auto">{{ job.job_field }}</p>
-                                        <p class="text-muted">{{ job.job_location }}</p>
+                                        <h5 class="mr-auto">{{ job.job_field }}</h5>
+                                        <p class="mr-auto">{{ job.job_desc }}</p>
+                                        <i class="fas fa-map-marker-alt text-muted"> {{ job.job_location }}</i>
                                         <div class="row">
-                                           <div class="mx-auto">
+                                           <div class="ml-auto mr-3">
+                                               {% if job.id not in applied_jobs %}
                                                 <form method="post" action="{% url 'add-job-applicant' job.id %}">
                                                     {% csrf_token %}
                                                     <button class="btn btn-outline-dark" type="submit">Apply</button>
                                                 </form>
+                                               {% else %}
+                                                    <button class="btn btn-outline-secondary disabled"><i class="fas fa-check"></i> Applied</button>
+                                               {% endif %}
                                            </div>
-                                            <button class="btn btn-outline-dark mx-auto">View Details</button>
                                         </div>
                                     </div>
                                     <div class="card-footer">
@@ -62,7 +65,6 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <div class="py-3 mx-auto px-3">

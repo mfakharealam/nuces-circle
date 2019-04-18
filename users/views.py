@@ -201,8 +201,8 @@ def edit_interest_info(request):
 def update_interest_info(request):
     if request.method == 'POST':
         # obj = Education.objects.filter(pk=eid)
-        int_data = Interests.objects.filter(user=request.user)
-        int_form = InterestsForm(instance=int_data)
+        int_data = Interests.objects.filter(user=request.user).first()
+        int_form = InterestsForm(request.POST, instance=int_data)
         int_f = int_form.save(commit=False)
         int_f.user = request.user
         int_f.save()

@@ -17,7 +17,9 @@
                             <a href="{% url 'profile' %}"><i class="fas fa-edit"></i> Edit</a>
                         {% else %} <!-- if not the current logged in user -->
                             {% if button_status == 'not_friend' %}
-                                <a class="btn btn-dark" href="{% url 'send-connect-request' to_user.id %}">Connect</a>
+                                {% if not user.recruiter %}
+                                    <a class="btn btn-dark" href="{% url 'send-connect-request' to_user.id %}">Connect</a>
+                                {% endif %}
                             {% elif button_status == 'is_friend' %}
                                     <div class="dropdown">
                                         <button class="btn btn-dark dropdown-toggle table-hover" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
