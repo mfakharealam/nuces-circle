@@ -16,11 +16,12 @@ def register(request):
             messages.success(request, f'Account created for {username}!')
             return redirect('circle-login')
         else:
-            return redirect('register')
+            recruiter_form = RecruiterRegForm()
+            return render(request, 'users/register.html', {'form': form, 'recruiter_form': recruiter_form})
     else:
         form = UserRegisterForm()
         recruiter_form = RecruiterRegForm()
-        return render(request, 'users/register.html', {'form': form, 'recruiter_form': recruiter_form})
+    return render(request, 'users/register.html', {'form': form, 'recruiter_form': recruiter_form})
 
 
 def register_recruiter(request):
