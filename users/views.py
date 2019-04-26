@@ -45,6 +45,7 @@ def register_recruiter(request):
 
 
 def check_user(request):
+    print('here!')
     rec = Recruiter.objects.filter(user=request.user)
     if rec:
         return redirect('circle-recruit')

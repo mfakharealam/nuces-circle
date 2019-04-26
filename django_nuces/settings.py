@@ -40,7 +40,39 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
+    "sslserver",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SOCIAL_AUTH_FACEBOOK_KEY = '328481331148399'        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '6bd78609cf9d84277462dd1aa07e93a6'  # App Secret
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email, age_range',
+}
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78vpsz2xgwwew6'  # Client ID
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = '1HMpbfosRobV8L57'  # Client Secret
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_liteprofile', 'r_emailaddress']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
+#                                ('firstName', 'first_name'),
+#                                ('lastName', 'last_name'),
+#                                ('emailAddress', 'email_address')]
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address', 'formatted-name', 'public-profile-url', 'picture-url']
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
+#     ('id', 'id'),
+#     ('formattedName', 'name'),
+#     ('emailAddress', 'email_address'),
+#     ('pictureUrl', 'picture_url'),
+#     ('publicProfileUrl', 'profile_url'),
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
