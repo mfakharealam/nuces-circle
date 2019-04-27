@@ -31,7 +31,8 @@
                     </div>
                     <div class="card-body">
                         <div class="content-section">
-                            <form method="post" class="form-group" action="{% url 'post-create' %}">
+                            <form method="post" class="form-group creating_post_ajax" action="."
+                            data-url='{{ request.build_absolute_uri|safe }}'>
                                 {% csrf_token %} <!-- for security purposes -->
                                 <fieldset class="form-group">
                                     {{ create_form|crispy }}
@@ -44,6 +45,7 @@
                     </div>
                 </div>
             </div>
+            <div id="post_list_ajax">
             {% for post in posts %}
                 <div class="card gedf-card shadow-lg mb-5 bg-white">
                     <div class="card-header">
@@ -74,7 +76,7 @@
                                         </div>
                                 </div>
 
-                                <form method="post" class="form-group" action="{% url 'post-update' post.id %}">
+                                <form method="post" class="form-group update_post_ajax" action="{% url 'post-update' post.id %}">
                                 {% csrf_token %} <!-- for security purposes -->
                                     <div class="modal fade" id="createPostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
                                       <div class="modal-dialog" role="document">
@@ -92,13 +94,14 @@
                                           </div>
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger">Update it</button>
+                                              <input value="{{ post.id }}" id="current_update_post_id" type="hidden">
+                                            <button type="submit" class="btn btn-danger" onclick="update_post_ftn()">Update it</button>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                 </form>
-                                <form method="post" class="form-group" action="{% url 'post-delete' post.id %}">
+                                <form id="delete_form{{post.id}}" method="post" class="form-group delete_post_ajax" action="{% url 'post-delete' post.id %}">
                                     {% csrf_token %}
                                     <div class="modal fade" id="deletePostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                       <div class="modal-dialog" role="document">
@@ -114,7 +117,8 @@
                                           </div>
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                              <input value="{{ post.id }}" id="current_post_id" type="hidden">
+                                            <button type="submit" class="btn btn-danger" onclick="delete_post_ftn()">Delete</button>
                                           </div>
                                         </div>
                                       </div>
@@ -140,6 +144,7 @@
                     </div>
                 </div>
             {% endfor %}
+            </div>
 
         </div>
         <div class="col-md-3 mt-4">

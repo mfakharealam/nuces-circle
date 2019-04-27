@@ -3,8 +3,29 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience, Recruiter
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, \
-    EducationForm, InterestsForm, SkillForm, ExperienceForm, RecruiterRegForm
+    EducationForm, InterestsForm, SkillForm, ExperienceForm, RecruiterRegForm, FBRegistrationForm
 from django.contrib.auth.decorators import login_required
+
+
+def fb_register(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = FBRegistrationForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            request.POST.get('your_name')
+            request.POST.get('your_email')
+            # redirect to a new URL:
+
+            return redirect('circle-home')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = FBRegistrationForm()
+
+    return redirect('circle-login')
 
 
 def register(request):

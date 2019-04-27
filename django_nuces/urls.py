@@ -48,6 +48,7 @@ urlpatterns = [
     path('view_profile/int_edit/update', user_views.update_interest_info, name='update-int'),
     # auth
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='circle-login'),
+    path('fb_reg/', user_views.fb_register, name='fb-register'),
     path('logout/', user_views.logout_man, name='circle-logout'),
     path('check/', user_views.check_user, name='circle-checking'),
     # connect user

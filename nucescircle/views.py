@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from users.models import User, Profile, UserConnections, Recruiter
 from .models import Post, Job, JobApplications
@@ -8,7 +9,33 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.contrib.auth.decorators import login_required
 
 
-class PostListView(UserPassesTestMixin, LoginRequiredMixin, ListView):  # home list view
+class AjaxableResponseMixin:
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super().form_valid(form)
+        if self.request.is_ajax():
+            data = {
+                'pk': self.object.pk,
+            }
+            return JsonResponse(data)
+        else:
+            return response
+
+
+class PostListView(UserPassesTestMixin, AjaxableResponseMixin, LoginRequiredMixin, ListView):  # home list view
 
     model = Post
 
@@ -39,7 +66,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):  # home list view
     model = Post
 
 
-class CreatePostView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CreatePostView(LoginRequiredMixin, AjaxableResponseMixin, UserPassesTestMixin, CreateView):
     model = Post
     fields = ['content']
     context_object_name = 'form'
@@ -62,7 +89,7 @@ class CreatePostView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return True
 
 
-class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UpdatePostView(LoginRequiredMixin, AjaxableResponseMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['content']
 
@@ -78,7 +105,7 @@ class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, AjaxableResponseMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
 
