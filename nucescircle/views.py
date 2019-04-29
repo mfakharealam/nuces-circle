@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.core import serializers
 from django.urls import reverse_lazy
 from users.models import User, Profile, UserConnections, Recruiter
 from .models import Post, Job, JobApplications
+from users.models import Education
 from .forms import PostForm, JobForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required for classes
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -253,3 +255,32 @@ def add_job_applicant(request, *args, **kwargs):
                                                          job_applied_for=job)
                                                          # job_poster=job.posted_by)
     return redirect('circle-jobs')
+
+
+def get_posts(request):
+    if request.method == 'GET' and request.is_ajax():
+        # Return objects
+        posts = Post.objects.all()
+        ser_posts = serializers.serialize('json', posts)
+        data = {
+            'all_posts': ser_posts
+        }
+        return JsonResponse(data)
+
+
+@login_required
+def advanced_search(request):
+    filter_by = request.GET["selection_criteria"]
+    search_in = request.GET["q"]
+    if filter_by == "name":
+        user_objects = User.objects.filter(first_name__contains=search_in).prefetch_related('education_set')
+        if not user_objects:
+            user_objects = User.objects.filter(last_name__contains=search_in).prefetch_related('education_set')
+    elif filter_by == "discipline":
+        user_objects = User.objects.filter(education__study_field__contains=search_in).prefetch_related('education_set')
+        if not user_objects:
+            user_objects = User.objects.filter(education__degree__contains=search_in).prefetch_related('education_set')
+    elif filter_by == "gradDate":
+        user_objects = User.objects.filter(education__grad_year__contains=search_in).prefetch_related('education_set')
+
+    return render(request, 'nucescircle/findPeople2.html', {'result': user_objects})

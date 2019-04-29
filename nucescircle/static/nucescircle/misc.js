@@ -142,3 +142,18 @@ function hideModal(){
 // setInterval(function(){
 //     refreshStream();
 // },total_seconds * 1000);
+
+
+function validateText(id){
+    var txt = document.getElementById(id);
+    if(txt.value == ''){
+        return error('search string is empty');
+    }
+    return true;
+}
+
+function error(msg){
+    swal("Input Error!", msg, "error");
+    return false;
+}
+

@@ -44,7 +44,7 @@
                                         </div>
                                         <!--<p class="card-text">{{ job.job_desc }}</p>-->
                                         <h5 class="mr-auto">{{ job.job_field }}</h5>
-                                        <p class="mr-auto">{{ job.job_desc }}</p>
+                                        <p class="mr-auto">{{ job.job_desc|truncatechars:60 }}</p>
                                         <i class="fas fa-map-marker-alt text-muted"> {{ job.job_location }}</i>
                                         <div class="row">
                                            <div class="ml-auto mr-3">

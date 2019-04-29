@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div id="post_list_ajax">
+            <div id="post_list_ajax mainFeed">
             {% for post in posts %}
                 <div class="card gedf-card shadow-lg mb-5 bg-white">
                     <div class="card-header">
@@ -173,7 +173,27 @@
 </div>
 
 
-<script type="text/babel">
+<script>
+    var load_posts_scroll = function(){
+    $.ajax({
+            method: 'GET',
+            url: 'load_posts/',
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            dataType: "json",
+            success: function(data){
+                //alert(data.all_posts[0].fields.content);
+                $('#mainFeed').append($('#post_list_ajax',data.all_posts));// LoadFeed wala
+            },
+            error: function(error){
+                alert(data);
+                alert(error);
+                console.log(error);
+                console.log("error");
+            }
+        });
+    };
     var LoadFeed = function (username, name, postTitle, postContent)
     {
         var html = "<div class=\"card gedf-card mt-4\">\n" +
@@ -223,7 +243,8 @@
 
     window.onscroll = function () {
         if (window.scrollY > (document.body.offsetHeight - window.outerHeight)) {
-            LoadFeed("MFA", "Fakhar", "Random", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci assumenda commodi doloremque dolorum error, id inventore laudantium molestiae nam natus odio, pariatur quibusdam ratione rem suscipit ut voluptas. Accusantium, dolorem?");
+            load_posts_scroll();
+            //LoadFeed("MFA", "Fakhar", "Random", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci assumenda commodi doloremque dolorum error, id inventore laudantium molestiae nam natus odio, pariatur quibusdam ratione rem suscipit ut voluptas. Accusantium, dolorem?");
         }
     }
 </script>

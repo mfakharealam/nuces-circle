@@ -18,8 +18,11 @@ urlpatterns = [
     path('recruit/<int:pk>/detail/', JobDetailView.as_view(), name='job-detail'),
     path('recruit/post/new/', CreateJobView.as_view(), name='submit-recruit'),
     path('job_listings/', views.jobs_listing, name='circle-jobs'),
-    path('find_people/', views.find_people, name='circle-findPeople'),
+    path('find_people/', views.find_people, name='circle-find-people'),
     path('search_people/', views.search, name='search'),
+    path('find_people/advanced_search/', views.advanced_search, name='advanced-search'),
     path('recruit/<int:jid>/apply/', views.add_job_applicant, name='add-job-applicant'),
     path('social-auth/', include('social_django.urls', namespace='social')),
+    path('load_posts/', views.get_posts, name='inf-scroll-posts'),
+
 ]

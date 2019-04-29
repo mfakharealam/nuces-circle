@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib.auth import logout
 from .models import Education, Interests, Skills, Profile, UserConnections, User, WorkExperience, Recruiter
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, \
@@ -34,7 +36,17 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')  # When data is cleaned it is converted to appropriate type
-            messages.success(request, f'Account created for {username}!')
+            ################################################
+            subject = 'Thank you for registering to NUCESCircle!'
+            pwd = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
+            message = 'Your account details are as follows: \n' \
+                      'Username: ' + username + ' \nPassword: ' + pwd
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [email, ]
+            send_mail(subject, message, email_from, recipient_list)
+            messages.success(request, f'Sent you an email containing account details!')
+            ##################################################
             return redirect('circle-login')
         else:
             recruiter_form = RecruiterRegForm()

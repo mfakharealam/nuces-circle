@@ -41,7 +41,7 @@
         {% else %}
             <form method="get" action="{% url 'search' %}">
                 <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search by username..." id="txtQuery">
+                <input name="q" class="form-control" placeholder="Search by username..." id="txtQuery" required>
                 <span class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit" onclick="return validateText('txtQuery')">
                         <i class="fas fa-search"></i>
@@ -53,8 +53,9 @@
                 <nav class="nav nav-pills">
                     {% with url_name=request.resolver_match.url_name %}
                         <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-home' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-home' %}"><i class="fas fa-home"></i> Home</a>
-                        <a class="table-hover text-sm-center nav-link {% if url_name == 'my-circle' %}active{% endif %} mr-sm-3 text-white" href="{% url 'my-circle' %}"><i class="fas fa-user-plus"></i> My Circle</a>
+                        <a class="table-hover text-sm-center nav-link {% if url_name == 'my-circle' %}active{% endif %} mr-sm-3 text-white" href="{% url 'my-circle' %}"><i class="fas fa-users"></i> My Circle</a>
                         <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-jobs' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
+                        <a class="table-hover text-sm-center nav-link {% if url_name == 'circle-find-people' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-find-people' %}"><i class="fas fa-user-plus"></i> Find People</a>
                         <!--<a class="table-hover text-sm-center nav-link {% if url_name == 'circle-recruit' %}active{% endif %} mr-sm-3 text-white" href="{% url 'circle-recruit' %}"><i class="fas fa-bullhorn"></i> Recruit</a>-->
 
                         <div class="nav-item dropdown mr-sm-5 shadow-lg">
@@ -137,21 +138,7 @@
   crossorigin="anonymous"></script>
 <script src="{% static 'nucescircle/sampleUsers.js' %}"></script>
 <script src="{% static 'nucescircle/misc.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{% static 'nucescircle/tagsinput.js' %}"></script>
-<script type="text/javascript">
-
-    function validateText(id){
-		var txt = document.getElementById(id);
-		if(txt.value == ''){
-			return error('search string is empty');
-		}
-		return true;
-	}
-
-    function error(msg){
-		alert(msg);
-		return false;
-	}
-</script>
 </body>
 </html>

@@ -44,7 +44,7 @@ class Education(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.school, self.degree}'
+        return f'{self.school, self.degree, self.grad_year}'
 
     def get_absolute_url(self):
         return reverse('profile')
