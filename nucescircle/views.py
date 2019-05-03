@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 from django.urls import reverse_lazy
 from users.models import User, Profile, UserConnections, Recruiter
 from .models import Post, Job, JobApplications
-from users.models import Education
+import json
 from .forms import PostForm, JobForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # like @login_required for classes
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -256,16 +256,16 @@ def add_job_applicant(request, *args, **kwargs):
                                                          # job_poster=job.posted_by)
     return redirect('circle-jobs')
 
-
-def get_posts(request):
-    if request.method == 'GET' and request.is_ajax():
-        # Return objects
-        posts = Post.objects.all()
-        ser_posts = serializers.serialize('json', posts)
-        data = {
-            'all_posts': ser_posts
-        }
-        return JsonResponse(data)
+#
+# def get_posts(request):
+#     if request.method == 'GET' and request.is_ajax():
+#         # Return objects
+#         posts = Post.objects.all()
+#         ser_posts = serializers.serialize('json', posts)
+#         data = {
+#             'all_posts': ser_posts
+#         }
+#         return JsonResponse(data)
 
 
 @login_required
@@ -284,3 +284,49 @@ def advanced_search(request):
         user_objects = User.objects.filter(education__grad_year__contains=search_in).prefetch_related('education_set')
 
     return render(request, 'nucescircle/findPeople2.html', {'result': user_objects})
+
+
+@login_required
+def loadfeed(request, count):
+    allposts = getposts(request, count)
+    # data = serializers.serialize('json', allposts)
+    data = json.dumps(allposts, default=str)
+    return HttpResponse(data, content_type='application/json')
+
+
+class PostData:
+    post = None
+    full_name = None
+    user_name = None
+    post_date = None
+    user_pic = None
+
+    def __init__(self, post, user_pic, user_name, first_name, last_name, date_post):
+        self.post = post
+        self.user_pic = user_pic
+        self.full_name = first_name + ' ' + last_name
+        self.user_name = user_name
+        self.post_date = date_post
+
+    def to_dict(self):
+        data = {}
+        data['postId'] = self.post.id
+        data['content'] = self.post.content
+        data['full_name'] = self.full_name
+        data['user_name'] = self.user_name
+        data['post_date'] = self.post.post_date
+        data['user_pic'] = self.post.post_user.profile.image.url
+        return data
+
+
+@login_required
+def getposts(request, count):
+    posts = Post.objects.all()  # rn get all objects
+    posts = sorted(posts, key=lambda x: x.post_date, reverse=True)  # in descending order, latest at first
+    posts = posts[count or None:]    # removing the previously counted no of posts from the list
+    posts = list(posts[:5])    # keeping only 5 posts, only 5 posts are sent in each ajax req
+    result = []
+    for p in posts:
+        result.append(PostData(p, p.post_user.profile.image.url, p.post_user.username, p.post_user.first_name,
+                               p.post_user.last_name, p.post_date).to_dict())
+    return result

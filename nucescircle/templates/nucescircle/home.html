@@ -22,7 +22,7 @@
                     </ul>
                 </div>
         </div>
-        <div class="col-md-6 gedf-main mt-4" id="mainFeed">
+        <div class="col-md-6 gedf-main mt-4">
 
             <div class="mb-4">
                 <div class="card shadow-lg mb-5 bg-white">
@@ -45,105 +45,105 @@
                     </div>
                 </div>
             </div>
-            <div id="post_list_ajax mainFeed">
-            {% for post in posts %}
-                <div class="card gedf-card shadow-lg mb-5 bg-white">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="mr-2">
-                                    <img class="rounded-circle post-img" src="{{ post.post_user.profile.image.url }}" alt="">
-                                </div>
-                                <div class="ml-2">
-                                    <div class="h5 m-0">@{{post.post_user.username}}</div>
-                                    <div class="h7 text-muted">{{post.post_user.first_name}} {{post.post_user.last_name}}</div>
-                                </div>
-                            </div>
-                            <div>
-                                {% if post.post_user == user %}
-                                <div class="dropdown">
-                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                            <div class="h6 dropdown-header">Configuration</div>
-                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#createPostModal{{post.id}}">
-                                                    Edit
-                                                </a>
-                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#deletePostModal{{post.id}}">
-                                                    Delete
-                                                </a>
-                                        </div>
-                                </div>
+            <div id="mainFeed">
+<!--            {% for post in posts %}-->
+<!--                <div class="card gedf-card shadow-lg mb-5 bg-white">-->
+<!--                    <div class="card-header">-->
+<!--                        <div class="d-flex justify-content-between align-items-center">-->
+<!--                            <div class="d-flex justify-content-between align-items-center">-->
+<!--                                <div class="mr-2">-->
+<!--                                    <img class="rounded-circle post-img" src="{{ post.post_user.profile.image.url }}" alt="">-->
+<!--                                </div>-->
+<!--                                <div class="ml-2">-->
+<!--                                    <div class="h5 m-0">@{{post.post_user.username}}</div>-->
+<!--                                    <div class="h7 text-muted">{{post.post_user.first_name}} {{post.post_user.last_name}}</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                {% if post.post_user == user %}-->
+<!--                                <div class="dropdown">-->
+<!--                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                        <i class="fas fa-ellipsis-h"></i>-->
+<!--                                    </button>-->
+<!--                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">-->
+<!--                                            <div class="h6 dropdown-header">Configuration</div>-->
+<!--                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#createPostModal{{post.id}}">-->
+<!--                                                    Edit-->
+<!--                                                </a>-->
+<!--                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#deletePostModal{{post.id}}">-->
+<!--                                                    Delete-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                </div>-->
 
-                                <form method="post" class="form-group update_post_ajax" action="{% url 'post-update' post.id %}">
-                                {% csrf_token %} <!-- for security purposes -->
-                                    <div class="modal fade" id="createPostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="createModalLabel">Update Post</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                            </button>
-                                          </div>
-                                          <div class="modal-body">
-                                            <fieldset class="form-group">
-                                                <textarea class="form-control" name="content">{{ post.content }}</textarea>
-                                            </fieldset>
-                                          </div>
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                              <input value="{{ post.id }}" id="current_update_post_id" type="hidden">
-                                            <button type="submit" class="btn btn-danger" onclick="update_post_ftn()">Update it</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                </form>
-                                <form id="delete_form{{post.id}}" method="post" class="form-group delete_post_ajax" action="{% url 'post-delete' post.id %}">
-                                    {% csrf_token %}
-                                    <div class="modal fade" id="deletePostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel">Delete Post</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                            </button>
-                                          </div>
-                                          <div class="modal-body">
-                                            Post Content: {{ post.content }}
-                                          </div>
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                              <input value="{{ post.id }}" id="current_post_id" type="hidden">
-                                            <button type="submit" class="btn btn-danger" onclick="delete_post_ftn()">Delete</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                </form>
-                                {% endif %}
-                            </div>
-                        </div>
+<!--                                <form method="post" class="form-group update_post_ajax" action="{% url 'post-update' post.id %}">-->
+<!--                                {% csrf_token %} &lt;!&ndash; for security purposes &ndash;&gt;-->
+<!--                                    <div class="modal fade" id="createPostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">-->
+<!--                                      <div class="modal-dialog" role="document">-->
+<!--                                        <div class="modal-content">-->
+<!--                                          <div class="modal-header">-->
+<!--                                            <h5 class="modal-title" id="createModalLabel">Update Post</h5>-->
+<!--                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                              <span aria-hidden="true">&times;</span>-->
+<!--                                            </button>-->
+<!--                                          </div>-->
+<!--                                          <div class="modal-body">-->
+<!--                                            <fieldset class="form-group">-->
+<!--                                                <textarea class="form-control" name="content">{{ post.content }}</textarea>-->
+<!--                                            </fieldset>-->
+<!--                                          </div>-->
+<!--                                          <div class="modal-footer">-->
+<!--                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                                              <input value="{{ post.id }}" id="current_update_post_id" type="hidden">-->
+<!--                                            <button type="submit" class="btn btn-danger" onclick="update_post_ftn()">Update it</button>-->
+<!--                                          </div>-->
+<!--                                        </div>-->
+<!--                                      </div>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                                <form id="delete_form{{post.id}}" method="post" class="form-group delete_post_ajax" action="{% url 'post-delete' post.id %}">-->
+<!--                                    {% csrf_token %}-->
+<!--                                    <div class="modal fade" id="deletePostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
+<!--                                      <div class="modal-dialog" role="document">-->
+<!--                                        <div class="modal-content">-->
+<!--                                          <div class="modal-header">-->
+<!--                                            <h5 class="modal-title" id="deleteModalLabel">Delete Post</h5>-->
+<!--                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                              <span aria-hidden="true">&times;</span>-->
+<!--                                            </button>-->
+<!--                                          </div>-->
+<!--                                          <div class="modal-body">-->
+<!--                                            Post Content: {{ post.content }}-->
+<!--                                          </div>-->
+<!--                                          <div class="modal-footer">-->
+<!--                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                                              <input value="{{ post.id }}" id="current_post_id" type="hidden">-->
+<!--                                            <button type="submit" class="btn btn-danger" onclick="delete_post_ftn()">Delete</button>-->
+<!--                                          </div>-->
+<!--                                        </div>-->
+<!--                                      </div>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                                {% endif %}-->
+<!--                            </div>-->
+<!--                        </div>-->
 
-                    </div>
-                    <!--<a class="card-link" href="{% url 'post-detail' post.id %}">-->
-                    <div class="card-body">
-                        <div class="text-muted h7 mb-2"> <i class="fas fa-clock-o"></i>{{post.post_date}}</div>
-                         <p class="card-text">
-                            {{post.content}}
-                         </p>
-                    </div>
-                    <!--</a>-->
-                    <div class="card-footer">
-                        <a href="#" class="card-link"><i class="fas fa-gittip"></i> Like</a>
-                        <a href="#" class="card-link"><i class="fas fa-comment"></i> Comment</a>
-                        <a href="#" class="card-link"><i class="fas fa-mail-forward"></i> Share</a>
-                    </div>
-                </div>
-            {% endfor %}
+<!--                    </div>-->
+<!--                    &lt;!&ndash;<a class="card-link" href="{% url 'post-detail' post.id %}">&ndash;&gt;-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="text-muted h7 mb-2"> <i class="fas fa-clock-o"></i>{{post.post_date}}</div>-->
+<!--                         <p class="card-text">-->
+<!--                            {{post.content}}-->
+<!--                         </p>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash;</a>&ndash;&gt;-->
+<!--                    <div class="card-footer">-->
+<!--                        <a href="#" class="card-link"><i class="fas fa-gittip"></i> Like</a>-->
+<!--                        <a href="#" class="card-link"><i class="fas fa-comment"></i> Comment</a>-->
+<!--                        <a href="#" class="card-link"><i class="fas fa-mail-forward"></i> Share</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            {% endfor %}-->
             </div>
 
         </div>
@@ -172,80 +172,4 @@
     </div>
 </div>
 
-
-<script>
-    var load_posts_scroll = function(){
-    $.ajax({
-            method: 'GET',
-            url: 'load_posts/',
-            data: {
-                csrfmiddlewaretoken: "{{ csrf_token }}",
-            },
-            dataType: "json",
-            success: function(data){
-                //alert(data.all_posts[0].fields.content);
-                $('#mainFeed').append($('#post_list_ajax',data.all_posts));// LoadFeed wala
-            },
-            error: function(error){
-                alert(data);
-                alert(error);
-                console.log(error);
-                console.log("error");
-            }
-        });
-    };
-    var LoadFeed = function (username, name, postTitle, postContent)
-    {
-        var html = "<div class=\"card gedf-card mt-4\">\n" +
-            "                <div class=\"card-header\">\n" +
-            "                    <div class=\"d-flex justify-content-between align-items-center\">\n" +
-            "                        <div class=\"d-flex justify-content-between align-items-center\">\n" +
-            "                            <div class=\"mr-2\">\n" +
-            "                                <img class=\"rounded-circle\" width=\"45\" src=\"https://picsum.photos/50/50\" alt=\"\">\n" +
-            "                            </div>\n" +
-            "                            <div class=\"ml-2\">\n" +
-            "                                <div class=\"h5 m-0\">@"+ username + "</div>\n" +
-            "                                <div class=\"h7 text-muted\">"+ name +"</div>\n" +
-            "                            </div>\n" +
-            "                        </div>\n" +
-            "                        <div>\n" +
-            "                            <div class=\"dropdown\">\n" +
-            "                                <button class=\"btn btn-link dropdown-toggle\" type=\"button\" id=\"gedf-drop1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-            "                                    <i class=\"fas fa-ellipsis-h\"></i>\n" +
-            "                                </button>\n" +
-            "                                <div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"gedf-drop1\">\n" +
-            "                                    <div class=\"h6 dropdown-header\">Configuration</div>\n" +
-            "                                    <a class=\"dropdown-item\" href=\"#\">Save</a>\n" +
-            "                                    <a class=\"dropdown-item\" href=\"#\">Hide</a>\n" +
-            "                                    <a class=\"dropdown-item\" href=\"#\">Report</a>\n" +
-            "                                </div>\n" +
-            "                            </div>\n" +
-            "                        </div>\n" +
-            "                    </div>\n" +
-            "\n" +
-            "                </div>\n" +
-            "                <div class=\"card-body\">\n" +
-            "                    <div class=\"text-muted h7 mb-2\"> <i class=\"fas fa-clock-o\"></i>10 min ago</div>\n" +
-            "                    <a class=\"card-link\" href=\"#\">\n" +
-            "                        <h5 class=\"card-title\">"+ postTitle +"</h5>\n" +
-            "                    </a>\n" +
-            "\n" +
-            "                    <p class=\"card-text\">\n" + postContent + "</p>\n" +
-            "                </div>\n" +
-            "                <div class=\"card-footer\">\n" +
-            "                    <a href=\"#\" class=\"card-link\"><i class=\"fas fa-gittip\"></i> Like</a>\n" +
-            "                    <a href=\"#\" class=\"card-link\"><i class=\"fas fa-comment\"></i> Comment</a>\n" +
-            "                    <a href=\"#\" class=\"card-link\"><i class=\"fas fa-mail-forward\"></i> Share</a>\n" +
-            "                </div>\n" +
-            "            </div>";
-        document.getElementById("mainFeed").innerHTML+=html;
-    };
-
-    window.onscroll = function () {
-        if (window.scrollY > (document.body.offsetHeight - window.outerHeight)) {
-            load_posts_scroll();
-            //LoadFeed("MFA", "Fakhar", "Random", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci assumenda commodi doloremque dolorum error, id inventore laudantium molestiae nam natus odio, pariatur quibusdam ratione rem suscipit ut voluptas. Accusantium, dolorem?");
-        }
-    }
-</script>
 {% endblock %}

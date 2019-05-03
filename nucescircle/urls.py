@@ -23,6 +23,7 @@ urlpatterns = [
     path('find_people/advanced_search/', views.advanced_search, name='advanced-search'),
     path('recruit/<int:jid>/apply/', views.add_job_applicant, name='add-job-applicant'),
     path('social-auth/', include('social_django.urls', namespace='social')),
-    path('load_posts/', views.get_posts, name='inf-scroll-posts'),
+    # path('load_posts/', views.get_posts, name='inf-scroll-posts'),
+    path('next_posts/<int:count>/', views.loadfeed, name='nxt-posts'),
 
 ]
