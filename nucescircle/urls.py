@@ -1,7 +1,12 @@
 from django.urls import path, include
 from . import views
+from rest_framework import routers
+from .api import JobViewSet
 from .views import PostListView, CreatePostView, PostDetailView, \
     UpdatePostView, PostDeleteView, JobListView, JobDeleteView, CreateJobView, JobDetailView
+
+router = routers.DefaultRouter()
+router.register('api/jobs', JobViewSet, 'jobs')
 
 urlpatterns = [
     path('', PostListView.as_view(), name='circle-home'),  # home page
@@ -25,5 +30,4 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls', namespace='social')),
     # path('load_posts/', views.get_posts, name='inf-scroll-posts'),
     path('next_posts/<int:count>/', views.loadfeed, name='nxt-posts'),
-
-]
+] + router.urls

@@ -21,7 +21,7 @@
         </button>
     </div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse float-right" id="navbarSupportedContent">
         {% if request.user.recruiter %}
             <h3><span class="badge badge-light">Jobs</span></h3>
             {% with url_name=request.resolver_match.url_name %}

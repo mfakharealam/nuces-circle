@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     "sslserver",
+    'rest_framework',
 ]
 
 AUTHENTICATION_BACKENDS = [
