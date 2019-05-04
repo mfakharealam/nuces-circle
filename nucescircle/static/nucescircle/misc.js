@@ -210,13 +210,14 @@ function error(msg){
             curr_post_username = posts[i]["user_name"];
             post_date = posts[i]["post_date"];
             user_pic = posts[i]["user_pic"];
+            var img_id = 'img_id'+i;
             var html = "<div class=\"card gedf-card shadow-lg mb-5 bg-white\">\n" +
                 "                    <div class=\"card-header\">\n" +
                 "                        <div class=\"d-flex justify-content-between align-items-center\">\n" +
                 "                            <div class=\"d-flex justify-content-between align-items-center\">\n" +
-                "                                <div class=\"mr-2\">\n" +
-//                "                                    <img class=\"rounded-circle post-img\" src=\" " + user_pic + " \" alt=\"\">\n" +
-                "                                </div>\n" +
+                // "                                <div class=\"mr-2\">\n" +
+                // "                                    <img class=\"rounded-circle post-img\" src=\"{{ post.post_user.profile.image.url }}\" alt=\"\" id=" + img_id + ">\n" +
+                // "                                </div>\n" +
                 "                                <div class=\"ml-2\">\n" +
                 "                                    <div class=\"h5 m-0\">@" + curr_post_username + "</div>\n" +
                 "                                    <div class=\"h7 text-muted\">" + user_fname + "</div>\n" +
@@ -254,6 +255,8 @@ function error(msg){
                 "                    </div>\n" +
                 "                </div>";
             document.getElementById("mainFeed").innerHTML += html;
+            // var set_img = document.getElementById(img_id);
+            // set_img.src = user_pic;
         }
     }
     //
@@ -309,3 +312,70 @@ function error(msg){
             nextPostsAjax();
         }
     };
+
+    // $.ajax({
+    //   url: "find_people/advanced_search/",
+    //   type: "get", //send it through get method
+    //   data: {
+    //     ajaxid: 4,
+    //     UserID: UserID,
+    //     EmailAddress: EmailAddress
+    //   },
+    //   success: function(response) {
+    //     //Do Something
+    //   },
+    //   error: function(xhr) {
+    //     //Do Something to handle error
+    //   }
+    // });
+
+    $(document).ready(function(){
+    var $myForm = $('.advanced_search_form');
+    $myForm.submit(function(event){
+        event.preventDefault();
+        var $formData = $(this).serialize();
+        var $thisURL = 'advanced_search/' || $myForm.attr('data-url') || window.location.href; // or set your own url
+        $.ajax({
+            method: "GET",
+            url: $thisURL,
+            data: $formData,
+            success: handleFormSuccess,
+            error: handleFormError
+        })
+    });
+
+    function handleFormSuccess(data, textStatus, jqXHR){
+        console.log(data);
+        console.log(textStatus);
+        console.log(jqXHR);
+        var users = JSON.parse(data["result"]);
+        document.getElementById("load_ad_search_results").innerHTML = '';
+        for (var i = 0; i < users.length ; i++)
+        {
+            var f_name, u_id, u_name;
+            f_name = users[i]["fields"]["first_name"] + ' ' + users[i]["fields"]["last_name"];
+            u_name = users[i]["fields"]["username"];
+            u_id = users[i]["pk"];
+            var a_id = "a_id" + i;
+             var html = '    <div class="search-user-card text-center card border-dark mt-4 ml-4 mr-4 mb-4">\n' +
+                    // '            <div class="card-header">\n' +
+                    // '                        <img class="rounded-circle mt-4" src="{{ user.profile.image.url }}" height="120" width="120" alt="User Profile Image"/>\n' +
+                    // '            </div>\n' +
+                    '            <div class="card-body">\n' +
+                    '                <h5 class="card-title">' + f_name + '</h5>\n' +
+                    '                <a href="{% %}" class="btn btn-outline-dark" id=' + a_id + ' >View Profile</a>\n' +
+                    '            </div>\n' +
+                    '        </div>\n';
+            document.getElementById("load_ad_search_results").innerHTML += html;
+            var pro = document.getElementById(a_id);
+            pro.href = 'http://127.0.0.1:8000/view_profile/current-user-id=' + u_id + '/';
+        }
+        $myForm[0].reset(); // reset form data
+    }
+
+    function handleFormError(jqXHR, textStatus, errorThrown){
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+    }
+});

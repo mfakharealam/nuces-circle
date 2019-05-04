@@ -26,6 +26,7 @@ urlpatterns = [
     path('find_people/', views.find_people, name='circle-find-people'),
     path('search_people/', views.search, name='search'),
     path('find_people/advanced_search/', views.advanced_search, name='advanced-search'),
+    path('find_people/advanced_search/results', views.render_ad_result_page, name='advanced-search-result'),
     path('recruit/<int:jid>/apply/', views.add_job_applicant, name='add-job-applicant'),
     path('social-auth/', include('social_django.urls', namespace='social')),
     # path('load_posts/', views.get_posts, name='inf-scroll-posts'),

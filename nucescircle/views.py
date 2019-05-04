@@ -272,6 +272,7 @@ def add_job_applicant(request, *args, **kwargs):
 def advanced_search(request):
     filter_by = request.GET["selection_criteria"]
     search_in = request.GET["q"]
+    user_objects = None
     if filter_by == "name":
         user_objects = User.objects.filter(first_name__contains=search_in).prefetch_related('education_set')
         if not user_objects:
@@ -283,7 +284,18 @@ def advanced_search(request):
     elif filter_by == "gradDate":
         user_objects = User.objects.filter(education__grad_year__contains=search_in).prefetch_related('education_set')
 
-    return render(request, 'nucescircle/findPeople2.html', {'result': user_objects})
+    result = serializers.serialize('json', user_objects)
+    data = {
+        'result': result
+    }
+    return JsonResponse(data)
+
+
+def render_ad_result_page(request):
+    if request.is_ajax():
+        users = request.GET["user_objs"]
+        print(users)
+        return render(request, 'nucescircle/advanced_search_results.html', {'result': users})
 
 
 @login_required

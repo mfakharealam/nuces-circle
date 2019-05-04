@@ -6,23 +6,24 @@
             <div class="card-header bg-dark text-white text-center">
                 <h3>Connect with People</h3>
             </div>
-            <div class="card-body col-xs-8 mx-auto">
-                <form method="get" action="{% url 'advanced-search' %}">
-                    <div class="input-group mx-auto mt-4 mb-4">
-                        <div class="col-sm-5 ml-5">
+            <div class="card-body container mx-auto">
+                <form class="advanced_search_form" method="get" action="{% url 'advanced-search' %}">
+                    <div class="input-group mt-2 mb-4">
+                        <div class="col-md-4 ml-5 mt-2">
                             <input type="text" placeholder="Search..." class="form-control" name="q" id="searchField" required>
                         </div>
-                       <div class="col-sm-3 mr-2">
+                       <div class=" col-md-4 mr-2 mt-2">
                            <select name="selection_criteria" class="form-control btn-dark" id="criteria">
                                <option value="name">by Name</option>
                                <option value="discipline">by Discipline</option>
                                <option value="gradDate">by Graduation Date</option>
                            </select>
                        </div>
-                        <button class="btn btn-outline-dark" id="searchBtn" onclick="return validateText('searchField')">Search</button>
+                        <button class="btn btn-outline-dark mt-2 col-md-2" id="searchBtn" onclick="return validateText('searchField')">Search</button>
                     </div>
                 </form>
-                {% include "nucescircle/advanced_search_results.html" %}
+                <div id="load_ad_search_results" class="form-inline text-justify">
+                </div>
             </div>
         </div>
     </div>
