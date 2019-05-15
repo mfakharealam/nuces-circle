@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2ef=8w65w5e)lvyr!2+8a#t^nvv5_u3^5zxl$nw3)354kf)qq4'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -51,15 +51,15 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-SOCIAL_AUTH_FACEBOOK_KEY = '328481331148399'        # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '6bd78609cf9d84277462dd1aa07e93a6'  # App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = ''        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = ''  # App Secret
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email, age_range',
 }
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '78vpsz2xgwwew6'  # Client ID
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = '1HMpbfosRobV8L57'  # Client Secret
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = ''  # Client ID
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = ''  # Client Secret
 # SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_liteprofile', 'r_emailaddress']
 # SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['email-address']
 # SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [('id', 'id'),
@@ -172,5 +172,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'fealam007@gmail.com'
-EMAIL_HOST_PASSWORD = '22586447'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''

@@ -183,9 +183,9 @@ function error(msg){
     function refresh_the_stream(){
         count = 0;
         document.getElementById("mainFeed").innerHTML = '';
-        nextPostsAjax();
+        inf_scroll_ajax();
     }
-    var nextPostsAjax=function () {
+    var inf_scroll_ajax=function () {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
@@ -199,18 +199,18 @@ function error(msg){
         xhr.open("GET", "next_posts/" + count, true);
         xhr.send();
     };
-    nextPostsAjax();
+    inf_scroll_ajax();
     function addPost() {
         count = count + posts.length;
         var curr_post_username, user_fname, content, postId, post_date, user_pic;
-        for (i = 0; i < posts.length; i++) {
+        for (var i = 0; i < posts.length; i++) {
             user_fname = posts[i]["full_name"];
             content = posts[i]["content"];
             postId = posts[i]["post_id"];
             curr_post_username = posts[i]["user_name"];
             post_date = posts[i]["post_date"];
             user_pic = posts[i]["user_pic"];
-            var img_id = 'img_id'+i;
+            //var img_id = 'img_id'+i;
             var html = "<div class=\"card gedf-card shadow-lg mb-5 bg-white\">\n" +
                 "                    <div class=\"card-header\">\n" +
                 "                        <div class=\"d-flex justify-content-between align-items-center\">\n" +
@@ -309,7 +309,7 @@ function error(msg){
 
     window.onscroll = function () {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            nextPostsAjax();
+            inf_scroll_ajax();
         }
     };
 
