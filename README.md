@@ -5,12 +5,12 @@ Web Programming course Project. (NUCES-LHR)
 Some of the web-pages:
 Registration Page:
 
-![Registration Page](/randomProjectImages/Reg.png)
+![Registration Page](/randomProjectImages/blob/master/Reg.png)
 
 Home Page
 
-![Home Page](/randomProjectImages/home.png)
+![Home Page](/randomProjectImages/blob/master/home.png)
 
 Profile Page
 
-![Profile Page](/randomProjectImages/profile.png)
+![Profile Page](/randomProjectImages/blob/master/profile.png)
